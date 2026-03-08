@@ -1,0 +1,1256 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2026-02-16T00:00:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_auth_login",
+      "parentId": "fld_auth",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/auth/login",
+      "name": "Login",
+      "description": "Autentica um usuário e retorna tokens JWT",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"senha123\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_me",
+      "parentId": "fld_users",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/users/me",
+      "name": "Get Current User",
+      "description": "Retorna os dados do usuário autenticado",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_update_profile",
+      "parentId": "fld_users",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/users/profile",
+      "name": "Update Profile",
+      "description": "Atualiza o perfil do usuário autenticado",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Novo Nome\",\n  \"email\": \"novoemail@example.com\",\n  \"role\": \"PREMIUM\",\n  \"dateOfBirth\": \"1990-01-15\",\n  \"weight\": 75.5,\n  \"height\": 180,\n  \"goals\": [\"perder_peso\", \"ganhar_resistencia\"],\n  \"availability\": 5\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_today",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/today",
+      "name": "Get Today's Workout",
+      "description": "Retorna o treino do dia atual",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_by_id",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/{{ _.workout_id }}",
+      "name": "Get Workout by ID",
+      "description": "Retorna um treino específico por ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_history",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/history",
+      "name": "Get Workout History",
+      "description": "Retorna o histórico de treinos do usuário",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_training_plan",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/training-plan",
+      "name": "Get Training Plan",
+      "description": "Retorna o plano de treino atual do usuário",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_create",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts",
+      "name": "Create Workout",
+      "description": "Cria um novo treino para o usuário autenticado",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"date\": \"2026-02-28\",\n  \"sportType\": \"running\",\n  \"title\": \"Corrida leve\",\n  \"description\": \"Aquecimento 15min + 5x400m\",\n  \"status\": \"scheduled\",\n  \"intensity\": 5,\n  \"blocks\": [\n    {\n      \"type\": \"warmup\",\n      \"duration\": 15,\n      \"instructions\": \"Corrida leve, zona 2\"\n    },\n    {\n      \"type\": \"interval\",\n      \"duration\": 2,\n      \"targetPace\": \"5:00/km\",\n      \"instructions\": \"Tiro 400m\"\n    }\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599950,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_update",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/{{ _.workout_id }}",
+      "name": "Update Workout",
+      "description": "Atualiza os dados de um treino",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"title\": \"Treino Atualizado\",\n  \"description\": \"Nova descrição do treino\",\n  \"blocks\": [\n    {\n      \"type\": \"warmup\",\n      \"duration\": 600,\n      \"distance\": 1000,\n      \"targetPace\": \"6:00\",\n      \"instructions\": \"Aquecimento leve\"\n    },\n    {\n      \"type\": \"interval\",\n      \"duration\": 300,\n      \"distance\": 1000,\n      \"targetPace\": \"4:30\",\n      \"instructions\": \"Corrida intensa\"\n    },\n    {\n      \"type\": \"cooldown\",\n      \"duration\": 600,\n      \"targetPace\": \"6:30\",\n      \"instructions\": \"Desaquecimento\"\n    }\n  ],\n  \"intensity\": 8,\n  \"status\": \"scheduled\",\n  \"sportType\": \"running\",\n  \"date\": \"2026-02-16\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_feedback",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/{{ _.workout_id }}/feedback",
+      "name": "Submit Workout Feedback",
+      "description": "Envia feedback sobre um treino realizado",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"completed\": true,\n  \"effort\": 8,\n  \"fatigue\": 6\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_complete",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/{{ _.workout_id }}/complete",
+      "name": "Complete Workout",
+      "description": "Marca um treino como completo",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_workouts_skip",
+      "parentId": "fld_workouts",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/workouts/{{ _.workout_id }}/skip",
+      "name": "Skip Workout",
+      "description": "Marca um treino como pulado",
+      "method": "PATCH",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_integrations_list",
+      "parentId": "fld_integrations",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/integrations",
+      "name": "List Integrations",
+      "description": "Lista todas as integrações disponíveis e seu status",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_integrations_connect",
+      "parentId": "fld_integrations",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/integrations/{{ _.integration_id }}/connect",
+      "name": "Connect Integration",
+      "description": "Conecta uma integração para o usuário",
+      "method": "POST",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_list",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments",
+      "name": "List All Equipments",
+      "description": "Lista todos os equipamentos disponíveis",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_my",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments/my-equipments",
+      "name": "Get My Equipments",
+      "description": "Retorna os equipamentos do usuário",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_by_id",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments/{{ _.equipment_id }}",
+      "name": "Get Equipment by ID",
+      "description": "Retorna um equipamento específico",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_create",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments",
+      "name": "Create Equipment",
+      "description": "Cria um novo equipamento",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Tênis de Corrida\",\n  \"imagePath\": \"/images/tenis-corrida.png\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_update",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments/{{ _.equipment_id }}",
+      "name": "Update Equipment",
+      "description": "Atualiza um equipamento",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"name\": \"Tênis de Corrida Nike\",\n  \"imagePath\": \"/images/tenis-nike.png\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_delete",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments/{{ _.equipment_id }}",
+      "name": "Delete Equipment",
+      "description": "Remove um equipamento",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_add_to_user",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments/{{ _.equipment_id }}/add",
+      "name": "Add Equipment to User",
+      "description": "Adiciona equipamento ao usuário",
+      "method": "POST",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_equipments_remove_from_user",
+      "parentId": "fld_equipments",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/equipments/{{ _.equipment_id }}/remove",
+      "name": "Remove Equipment from User",
+      "description": "Remove equipamento do usuário",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_weekly_goals_by_plan",
+      "parentId": "fld_weekly_goals",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/weekly-goals/training-plan/{{ _.training_plan_id }}",
+      "name": "Get Weekly Goals by Plan",
+      "description": "Lista metas semanais de um plano",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599200,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_weekly_goals_by_id",
+      "parentId": "fld_weekly_goals",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/weekly-goals/{{ _.weekly_goal_id }}",
+      "name": "Get Weekly Goal by ID",
+      "description": "Retorna uma meta semanal específica",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599100,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_weekly_goals_create",
+      "parentId": "fld_weekly_goals",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/weekly-goals",
+      "name": "Create Weekly Goal",
+      "description": "Cria uma nova meta semanal",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"trainingPlanId\": \"{{ _.training_plan_id }}\",\n  \"weekStartDate\": \"2026-02-17\",\n  \"weekEndDate\": \"2026-02-23\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041599000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_weekly_goals_update",
+      "parentId": "fld_weekly_goals",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/weekly-goals/{{ _.weekly_goal_id }}",
+      "name": "Update Weekly Goal",
+      "description": "Atualiza uma meta semanal",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"weekStartDate\": \"2026-02-17\",\n  \"weekEndDate\": \"2026-02-23\",\n  \"status\": \"GENERATED\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598900,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_weekly_goals_delete",
+      "parentId": "fld_weekly_goals",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/weekly-goals/{{ _.weekly_goal_id }}",
+      "name": "Delete Weekly Goal",
+      "description": "Remove uma meta semanal",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598800,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_integrations_disconnect",
+      "parentId": "fld_integrations",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/integrations/{{ _.integration_id }}/disconnect",
+      "name": "Disconnect Integration",
+      "description": "Desconecta uma integração do usuário",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041600000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_training_plans_me",
+      "parentId": "fld_training_plans",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/training-plans/me",
+      "name": "Get My Training Plan",
+      "description": "Retorna o plano de treino do usuário autenticado",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598700,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_training_plans_by_id",
+      "parentId": "fld_training_plans",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/training-plans/{{ _.training_plan_id }}",
+      "name": "Get Training Plan by ID",
+      "description": "Retorna um plano de treino pelo ID (do usuário autenticado)",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598600,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_training_plans_create",
+      "parentId": "fld_training_plans",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/training-plans",
+      "name": "Create Training Plan",
+      "description": "Cria um novo plano de treino para o usuário autenticado",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"startDate\": \"2026-02-28\",\n  \"weeks\": {\n    \"1\": {\n      \"number\": 1,\n      \"workouts\": []\n    }\n  }\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598500,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_training_plans_update",
+      "parentId": "fld_training_plans",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/training-plans/{{ _.training_plan_id }}",
+      "name": "Update Training Plan",
+      "description": "Atualiza um plano de treino existente",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"startDate\": \"2026-02-28\",\n  \"weeks\": {\n    \"1\": {\n      \"number\": 1,\n      \"workouts\": []\n    }\n  }\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598400,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_training_plans_delete",
+      "parentId": "fld_training_plans",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "url": "{{ _.base_url }}/training-plans/{{ _.training_plan_id }}",
+      "name": "Delete Training Plan",
+      "description": "Remove um plano de treino",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{{ _.access_token }}",
+        "prefix": ""
+      },
+      "metaSortKey": -1708041598300,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_auth",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "🔐 Authentication",
+      "description": "Endpoints de autenticação",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041600000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_users",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "👤 Users",
+      "description": "Endpoints de usuários",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041599000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_workouts",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "🏋️ Workouts",
+      "description": "Endpoints de treinos",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041598000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_integrations",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "🔗 Integrations",
+      "description": "Endpoints de integrações",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041597000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_equipments",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "🏃 Equipments",
+      "description": "Endpoints de equipamentos",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041596000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_weekly_goals",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "📅 Weekly Goals",
+      "description": "Endpoints de metas semanais",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041595000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_training_plans",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "📋 Training Plans",
+      "description": "Endpoints de planos de treino",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1708041594500,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_iafit",
+      "parentId": null,
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "IAFit Backend - REST API",
+      "description": "Collection completa da API REST do IAFit Backend",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_iafit",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:4000",
+        "access_token": "",
+        "workout_id": "",
+        "integration_id": "",
+        "equipment_id": "",
+        "weekly_goal_id": "",
+        "training_plan_id": ""
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url",
+          "access_token",
+          "workout_id",
+          "integration_id",
+          "equipment_id",
+          "weekly_goal_id",
+          "training_plan_id"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1708041600000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_dev",
+      "parentId": "env_base",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "Development",
+      "data": {
+        "base_url": "http://localhost:4000"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url"
+        ]
+      },
+      "color": "#7d69cb",
+      "isPrivate": false,
+      "metaSortKey": 1708041600000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_prod",
+      "parentId": "env_base",
+      "modified": 1708041600000,
+      "created": 1708041600000,
+      "name": "Production",
+      "data": {
+        "base_url": "https://api.iafit.com"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "base_url"
+        ]
+      },
+      "color": "#d9534f",
+      "isPrivate": false,
+      "metaSortKey": 1708041601000,
+      "_type": "environment"
+    }
+  ]
+}

@@ -1,0 +1,209 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SportType {
+  running
+  cycling
+  swimming
+  strength
+  crossfit
+  triathlon
+  duathlon
+  yoga
+  walking
+  other
+}
+
+enum TrainingPlanStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  LOCKED
+  DRAFT
+}
+
+enum WorkoutStatus {
+  scheduled
+  done
+  skipped
+  partial
+}
+
+enum IntegrationType {
+  strava
+  garmin
+  apple_health
+  other
+}
+
+enum RoleEnum {
+  STANDARD
+  PREMIUM
+  ADMIN
+}
+
+enum WeeklyGoalStatus {
+  PLANNED
+  GENERATED
+  CANCELLED
+  LOCKED
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  username     String    @unique
+  email        String    @unique
+  password     String
+  role         RoleEnum  @default(STANDARD)
+  dateOfBirth  DateTime? @map("date_of_birth")
+  weight       Float?
+  height       Float?
+  goals        String[]
+  availability Int?
+  imc          Float?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  sessions      Session[]
+  workouts      Workout[]
+  feedback      WorkoutFeedback[]
+  trainingPlans TrainingPlan[]
+  integrations  Integration[]
+  equipments    UserEquipment[]
+
+  @@map("users")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  refreshToken String   @unique @map("refresh_token")
+  expiresAt    DateTime @map("expires_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@map("sessions")
+}
+
+model Workout {
+  id             String        @id @default(uuid())
+  trainingPlanId String        @map("training_plan_id")
+  weeklyGoalId   String?       @map("weekly_goal_id")
+  dateScheduled  DateTime      @map("date_scheduled")
+  sportType      SportType     @map("sport_type")
+  title          String
+  description    String?
+  blocks         Json
+  status         WorkoutStatus
+  intensity      Int?
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trainingPlan TrainingPlan      @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  weeklyGoal   WeeklyGoal?       @relation(fields: [weeklyGoalId], references: [id], onDelete: Cascade)
+  userId       String            @map("user_id")
+  feedback     WorkoutFeedback[]
+
+  @@map("workouts")
+}
+
+model TrainingPlan {
+  id           String             @id @default(uuid())
+  startDate    String
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
+  objective    String
+  targetDate   DateTime?          @map("target_date")
+  sports       SportType[]        @map("sports")
+  autoGenerate Boolean            @default(false) @map("auto_generate")
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String             @unique @map("user_id")
+  weeklyGoals  WeeklyGoal[]
+  status       TrainingPlanStatus @default(DRAFT) @map("status")
+  workouts     Workout[]
+
+  @@map("training_plans")
+}
+
+model WorkoutFeedback {
+  id        String   @id @default(uuid())
+  completed Boolean
+  effort    Int
+  fatigue   Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @map("user_id")
+  workout   Workout @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  workoutId String  @map("workout_id")
+
+  @@map("workout_feedbacks")
+}
+
+model Integration {
+  id        String          @id
+  name      String
+  icon      String
+  connected Boolean
+  type      IntegrationType
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@map("integrations")
+}
+
+model Equipment {
+  uuid      String   @id @default(uuid())
+  name      String
+  imagePath String   @map("image_path")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  userEquipments UserEquipment[]
+
+  @@map("equipments")
+}
+
+model UserEquipment {
+  userId      String   @map("user_id")
+  equipmentId String   @map("equipment_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  equipment Equipment @relation(fields: [equipmentId], references: [uuid], onDelete: Cascade)
+
+  @@id([userId, equipmentId])
+  @@map("user_equipments")
+}
+
+model WeeklyGoal {
+  id             String           @id @default(uuid())
+  trainingPlanId String           @map("training_plan_id")
+  weekStartDate  DateTime         @map("week_start_date")
+  weekEndDate    DateTime         @map("week_end_date")
+  status         WeeklyGoalStatus @default(PLANNED)
+  metrics        Json             @map("metrics")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+
+  trainingPlan TrainingPlan @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  workouts     Workout[]
+
+  @@map("weekly_goals")
+}

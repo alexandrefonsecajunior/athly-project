@@ -1,0 +1,203 @@
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Card, GradientText, Badge, Divider, StatCard } from '@/components/ui'
+import { Input } from '@/components/ui/Input'
+import { Button } from '@/components/ui/Button'
+import { Section } from '@/components/layout'
+import { useAuthStore } from '@/store/authStore'
+import { getProfile, updateProfile } from '@/services/profileService'
+import toast from 'react-hot-toast'
+
+export function ProfilePage() {
+  const navigate = useNavigate()
+  const { user, setUser, logout } = useAuthStore()
+  const [name, setName] = useState(user?.name ?? '')
+  const [goals, setGoals] = useState(user?.goals?.join(', ') ?? '')
+  const [availability, setAvailability] = useState(String(user?.availability ?? 5))
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    getProfile().then((profile) => {
+      setUser(profile)
+      setName(profile.name)
+      setGoals(profile.goals?.join(', ') ?? '')
+      setAvailability(String(profile.availability ?? 5))
+    })
+  }, [setUser])
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      const updated = await updateProfile({
+        name,
+        goals: goals.split(',').map((g) => g.trim()).filter(Boolean),
+        availability: Number(availability) || 5,
+      })
+      setUser(updated)
+      toast.success('Perfil atualizado!')
+    } catch {
+      toast.error('Erro ao atualizar perfil')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <Section spacing="md">
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center text-4xl glow-primary">
+            👤
+          </div>
+          <div className="flex-1">
+            <GradientText variant="primary">
+              <h1 className="text-3xl font-bold">{user?.name || 'Perfil'}</h1>
+            </GradientText>
+            <p className="text-[var(--color-text-secondary)] mt-1">
+              {user?.email}
+            </p>
+            <Badge variant="neon" size="sm" className="mt-2">
+              ⚡ Atleta Premium
+            </Badge>
+          </div>
+        </div>
+      </Section>
+
+      {/* Stats */}
+      <div className="grid md:grid-cols-3 gap-4">
+        <StatCard
+          label="Treinos"
+          value="142"
+          icon="🏋️"
+          gradient
+        />
+        <StatCard
+          label="Sequência"
+          value="28 dias"
+          icon="🔥"
+          badge={{ text: 'Recorde!', variant: 'success' }}
+        />
+        <StatCard
+          label="Nível"
+          value="Avançado"
+          icon="⭐"
+        />
+      </div>
+
+      <Divider variant="gradient" />
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <Section title="Informações Pessoais" spacing="md">
+          <Card padding="lg">
+            <div className="space-y-4">
+              <Input
+                label="Nome"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                icon={<span>👤</span>}
+              />
+              <Input
+                label="Email"
+                type="email"
+                value={user?.email ?? ''}
+                disabled
+                icon={<span>📧</span>}
+              />
+            </div>
+          </Card>
+        </Section>
+
+        <Section title="Objetivos de Treino" subtitle="O que você deseja alcançar?" spacing="md">
+          <Card padding="lg">
+            <Input
+              label="Seus objetivos"
+              value={goals}
+              onChange={(e) => setGoals(e.target.value)}
+              placeholder="Melhorar resistência, Perder peso, Ganhar massa..."
+              icon={<span>🎯</span>}
+            />
+            <p className="mt-2 text-sm text-[var(--color-text-tertiary)]">
+              Separe múltiplos objetivos por vírgula
+            </p>
+          </Card>
+        </Section>
+
+        <Section title="Disponibilidade" subtitle="Quantos dias você pode treinar?" spacing="md">
+          <Card padding="lg">
+            <Input
+              label="Dias por semana"
+              type="number"
+              min="1"
+              max="7"
+              value={availability}
+              onChange={(e) => setAvailability(e.target.value)}
+              icon={<span>📅</span>}
+            />
+            <div className="mt-4 flex gap-2 flex-wrap">
+              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                <button
+                  key={day}
+                  type="button"
+                  onClick={() => setAvailability(String(day))}
+                  className={`px-4 py-2 rounded-xl font-semibold transition-all ${
+                    Number(availability) === day
+                      ? 'gradient-primary text-white glow-primary'
+                      : 'bg-[var(--color-surface-dark)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-card)]'
+                  }`}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+          </Card>
+        </Section>
+
+        <Section title="Modalidades Favoritas" spacing="md">
+          <Card padding="lg">
+            <p className="text-[var(--color-text-secondary)] mb-4">
+              Personalizado de acordo com suas preferências
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="primary">🏃 Corrida</Badge>
+              <Badge variant="secondary">🚴 Ciclismo</Badge>
+              <Badge variant="success">💪 Força</Badge>
+              <Badge variant="primary">🧘 Yoga</Badge>
+            </div>
+          </Card>
+        </Section>
+
+        <Divider variant="gradient" />
+
+        {/* Actions */}
+        <div className="space-y-4">
+          <Button type="submit" variant="gradient" fullWidth size="lg" loading={loading} glow>
+            💾 Salvar alterações
+          </Button>
+
+          <Link to="/settings" className="block">
+            <Button variant="outline" fullWidth size="lg">
+              ⚙️ Configurações e integrações
+            </Button>
+          </Link>
+
+          <Button
+            type="button"
+            variant="danger"
+            fullWidth
+            onClick={() => {
+              if (confirm('Tem certeza que deseja sair?')) {
+                logout()
+                navigate('/login')
+              }
+            }}
+          >
+            🚪 Sair da conta
+          </Button>
+        </div>
+      </form>
+    </div>
+  )
+}
