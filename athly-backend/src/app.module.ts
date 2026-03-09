@@ -10,6 +10,7 @@ import { IntegrationsModule } from './modules/integrations/integrations.module';
 import { EquipmentsModule } from './modules/equipments/equipments.module';
 import { WeeklyGoalsModule } from './modules/weekly-goals/weekly-goals.module';
 import { TrainingPlansModule } from './modules/training-plans/training-plans.module';
+import { AiPlannerModule } from './modules/ai-planner/ai-planner.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { TrainingPlansModule } from './modules/training-plans/training-plans.mod
     EquipmentsModule,
     WeeklyGoalsModule,
     TrainingPlansModule,
+    AiPlannerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
