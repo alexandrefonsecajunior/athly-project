@@ -17,6 +17,10 @@ services:
     restart: always
     ports:
       - '4000:4000'
+    command: npm run dev
+    volumes:
+      - ./athly-backend:/app
+      - /app/node_modules
     env_file:
       - ./athly-backend/.env
     environment:
@@ -31,6 +35,10 @@ services:
     restart: always
     ports:
       - '5173:5173'
+    command: npm run dev
+    volumes:
+      - ./athly-frontend:/app
+      - /app/node_modules
     env_file:
       - ./athly-frontend/.env
     depends_on:
