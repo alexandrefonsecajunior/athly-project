@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Card, Badge } from '@/components/ui'
+import { createPortal } from 'react-dom'
+import { Badge } from '@/components/ui'
 import { Button } from '@/components/ui/Button'
 import { initiateStravaOAuth } from '@/services/integrationService'
 import toast from 'react-hot-toast'
@@ -22,13 +23,34 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
     }
   }
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem',
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+      }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <Card variant="default" padding="lg" className="w-full max-w-md animate-in fade-in-0 zoom-in-95">
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '28rem',
+          borderRadius: '1rem',
+          backgroundColor: 'var(--color-surface-card)',
+          border: '1px solid var(--color-border-dark)',
+          padding: '1.5rem',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+        }}
+      >
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
@@ -42,7 +64,7 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
           </div>
 
           {/* Benefits */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             {[
               'Analisa seu ritmo e distâncias reais',
               'Adapta a intensidade ao seu nível atual',
@@ -50,20 +72,25 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
               'Gera planos cada vez mais precisos',
             ].map((benefit) => (
               <div key={benefit} className="flex items-center gap-3">
-                <span className="text-[var(--color-primary-400)] font-bold text-lg">✓</span>
+                <span className="shrink-0 text-[var(--color-primary-400)] font-bold text-lg">✓</span>
                 <span className="text-sm text-[var(--color-text-secondary)]">{benefit}</span>
               </div>
             ))}
           </div>
 
-          <div className="border-t border-[var(--color-surface-card)] pt-4 space-y-2">
+          <div
+            style={{ borderTop: '1px solid var(--color-surface-dark)', paddingTop: '1rem' }}
+            className="space-y-3"
+          >
             <p className="text-xs text-[var(--color-text-tertiary)] text-center">
               Sem o Strava, geramos um plano de avaliação inicial com 5 treinos para medir seu
               nível antes de personalizar.
             </p>
-            <Badge variant="secondary" size="sm" className="mx-auto block w-fit">
-              Plano de avaliação disponível sem Strava
-            </Badge>
+            <div className="flex justify-center">
+              <Badge variant="secondary" size="sm">
+                Plano de avaliação disponível sem Strava
+              </Badge>
+            </div>
           </div>
 
           {/* Actions */}
@@ -76,7 +103,7 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
               onClick={handleConnect}
               className="w-full"
             >
-              🔗 Conectar Strava
+              Conectar Strava
             </Button>
             <Button
               variant="ghost"
@@ -88,7 +115,8 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
             </Button>
           </div>
         </div>
-      </Card>
-    </div>
+      </div>
+    </div>,
+    document.body
   )
 }

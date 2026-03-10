@@ -5,6 +5,7 @@ import { useAuthStore } from "@/store/authStore";
 
 // Pages - lazy loaded for better performance
 import { LoginPage } from "@/pages/LoginPage";
+import { RegisterPage } from "@/pages/RegisterPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { PlanPage } from "@/pages/PlanPage";
 import { WorkoutPage } from "@/pages/WorkoutPage";
@@ -32,6 +33,14 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/register",
+    element: (
+      <AuthLayout>
+        <RegisterPage />
+      </AuthLayout>
+    ),
+  },
+  {
     path: "/",
     element: (
       <ProtectedRoute>
@@ -50,7 +59,7 @@ export const router = createBrowserRouter([
       { path: "settings", element: <SettingsPage /> },
     ],
   },
-  { path: "oauth/strava/callback", element: <OAuthCallbackPage /> },
+  { path: "/oauth/strava/callback", element: <OAuthCallbackPage /> },
   { path: "design-system", element: <DesignSystemPage /> },
   { path: "*", element: <Navigate to="/dashboard" replace /> },
 ]);

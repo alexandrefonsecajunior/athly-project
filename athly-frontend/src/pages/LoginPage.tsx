@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button, Card, GradientText, Badge, Divider } from "@/components/ui";
 import { Input } from "@/components/ui/Input";
 import { useAuthStore } from "@/store/authStore";
@@ -98,7 +98,13 @@ export function LoginPage() {
             </form>
 
             <p className="mt-6 text-center text-sm text-[var(--color-text-tertiary)]">
-              Use suas credenciais para acessar
+              Não tem uma conta?{" "}
+              <Link
+                to="/register"
+                className="text-[var(--color-primary)] hover:text-[var(--color-primary-400)] font-semibold transition-colors"
+              >
+                Criar conta
+              </Link>
             </p>
           </div>
         </Card>

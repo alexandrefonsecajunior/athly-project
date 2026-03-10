@@ -6,6 +6,21 @@ export async function login(email: string, password: string): Promise<AuthPayloa
   return data
 }
 
+export interface RegisterInput {
+  email: string
+  userName: string
+  name: string
+  password: string
+  confirmPassword: string
+  dateOfBirth: string
+  weight: number
+  height: number
+}
+
+export async function register(data: RegisterInput): Promise<AuthPayload> {
+  return api.register(data)
+}
+
 export async function getMe(): Promise<User | null> {
   try {
     const user = await api.getMe()

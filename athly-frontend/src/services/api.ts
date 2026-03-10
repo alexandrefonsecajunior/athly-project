@@ -73,6 +73,24 @@ class ApiClient {
     return data
   }
 
+  async register(data: {
+    email: string
+    userName: string
+    name: string
+    password: string
+    confirmPassword: string
+    dateOfBirth: string
+    weight: number
+    height: number
+  }): Promise<AuthPayload> {
+    const result = await this.request<AuthPayload>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+    this.setToken(result.accessToken)
+    return result
+  }
+
   // ===== USERS =====
   async getMe(): Promise<User> {
     return this.request<User>('/users/me')
