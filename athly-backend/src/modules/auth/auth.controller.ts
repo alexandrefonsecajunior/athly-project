@@ -1,9 +1,10 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { AuthPayload } from './dto/auth-payload.dto';
+import { StravaCallbackDto } from './dto/strava-callback.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -20,5 +21,17 @@ export class AuthController {
   @ApiOkResponse({ type: AuthPayload })
   async login(@Body() input: LoginDto): Promise<AuthPayload> {
     return this.authService.login(input.email, input.password);
+  }
+
+  @Get('strava/url')
+  @ApiOkResponse({ schema: { type: 'object', properties: { url: { type: 'string' } } } })
+  getStravaAuthUrl(): { url: string } {
+    return { url: this.authService.getStravaAuthUrl() };
+  }
+
+  @Post('strava/callback')
+  @ApiOkResponse({ type: AuthPayload })
+  async stravaCallback(@Body() input: StravaCallbackDto): Promise<AuthPayload> {
+    return this.authService.stravaLogin(input.code);
   }
 }

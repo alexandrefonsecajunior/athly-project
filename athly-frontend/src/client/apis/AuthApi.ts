@@ -15,17 +15,23 @@
 
 import * as runtime from '../runtime';
 import type {
+  AuthControllerGetStravaAuthUrl200Response,
   AuthPayload,
   LoginDto,
   RegisterUserDto,
+  StravaCallbackDto,
 } from '../models/index';
 import {
+    AuthControllerGetStravaAuthUrl200ResponseFromJSON,
+    AuthControllerGetStravaAuthUrl200ResponseToJSON,
     AuthPayloadFromJSON,
     AuthPayloadToJSON,
     LoginDtoFromJSON,
     LoginDtoToJSON,
     RegisterUserDtoFromJSON,
     RegisterUserDtoToJSON,
+    StravaCallbackDtoFromJSON,
+    StravaCallbackDtoToJSON,
 } from '../models/index';
 
 export interface AuthControllerLoginRequest {
@@ -36,10 +42,49 @@ export interface AuthControllerRegisterRequest {
     registerUserDto: RegisterUserDto;
 }
 
+export interface AuthControllerStravaCallbackRequest {
+    stravaCallbackDto: StravaCallbackDto;
+}
+
 /**
  * 
  */
 export class AuthApi extends runtime.BaseAPI {
+
+    /**
+     * Creates request options for authControllerGetStravaAuthUrl without sending the request
+     */
+    async authControllerGetStravaAuthUrlRequestOpts(): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+
+        let urlPath = `/auth/strava/url`;
+
+        return {
+            path: urlPath,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     */
+    async authControllerGetStravaAuthUrlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthControllerGetStravaAuthUrl200Response>> {
+        const requestOptions = await this.authControllerGetStravaAuthUrlRequestOpts();
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthControllerGetStravaAuthUrl200ResponseFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async authControllerGetStravaAuthUrl(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthControllerGetStravaAuthUrl200Response> {
+        const response = await this.authControllerGetStravaAuthUrlRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      * Creates request options for authControllerLogin without sending the request
@@ -128,6 +173,51 @@ export class AuthApi extends runtime.BaseAPI {
      */
     async authControllerRegister(requestParameters: AuthControllerRegisterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthPayload> {
         const response = await this.authControllerRegisterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authControllerStravaCallback without sending the request
+     */
+    async authControllerStravaCallbackRequestOpts(requestParameters: AuthControllerStravaCallbackRequest): Promise<runtime.RequestOpts> {
+        if (requestParameters['stravaCallbackDto'] == null) {
+            throw new runtime.RequiredError(
+                'stravaCallbackDto',
+                'Required parameter "stravaCallbackDto" was null or undefined when calling authControllerStravaCallback().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+
+        let urlPath = `/auth/strava/callback`;
+
+        return {
+            path: urlPath,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: StravaCallbackDtoToJSON(requestParameters['stravaCallbackDto']),
+        };
+    }
+
+    /**
+     */
+    async authControllerStravaCallbackRaw(requestParameters: AuthControllerStravaCallbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthPayload>> {
+        const requestOptions = await this.authControllerStravaCallbackRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthPayloadFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async authControllerStravaCallback(requestParameters: AuthControllerStravaCallbackRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthPayload> {
+        const response = await this.authControllerStravaCallbackRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

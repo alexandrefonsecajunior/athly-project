@@ -22,7 +22,7 @@ export class IntegrationsService {
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
     private readonly stravaService: StravaService,
-  ) {}
+  ) { }
 
   async getIntegrations(userId: string): Promise<IntegrationModel[]> {
     const integrations = await this.prisma.integration.findMany({ where: { userId } });

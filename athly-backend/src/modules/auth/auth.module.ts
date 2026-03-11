@@ -6,6 +6,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
+import { StravaModule } from '../strava/strava.module';
+import { IntegrationsModule } from '../integrations/integrations.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { UsersModule } from '../users/users.module';
       }),
     }),
     UsersModule,
+    StravaModule,
+    IntegrationsModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

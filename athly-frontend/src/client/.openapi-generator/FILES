@@ -12,6 +12,7 @@ docs/AiPlannerApi.md
 docs/AiPlannerResultModel.md
 docs/AppApi.md
 docs/AuthApi.md
+docs/AuthControllerGetStravaAuthUrl200Response.md
 docs/AuthPayload.md
 docs/CreateEquipmentDto.md
 docs/CreateTrainingPlanDto.md
@@ -20,7 +21,6 @@ docs/CreateWorkoutDto.md
 docs/EquipmentsApi.md
 docs/IntegrationModel.md
 docs/IntegrationsApi.md
-docs/IntegrationsControllerGetStravaAuthUrl200Response.md
 docs/IntegrationsControllerSyncStrava200Response.md
 docs/LoginDto.md
 docs/PlanNextWeekDto.md
@@ -45,13 +45,13 @@ docs/WorkoutModel.md
 docs/WorkoutsApi.md
 index.ts
 models/AiPlannerResultModel.ts
+models/AuthControllerGetStravaAuthUrl200Response.ts
 models/AuthPayload.ts
 models/CreateEquipmentDto.ts
 models/CreateTrainingPlanDto.ts
 models/CreateWeeklyGoalDto.ts
 models/CreateWorkoutDto.ts
 models/IntegrationModel.ts
-models/IntegrationsControllerGetStravaAuthUrl200Response.ts
 models/IntegrationsControllerSyncStrava200Response.ts
 models/LoginDto.ts
 models/PlanNextWeekDto.ts

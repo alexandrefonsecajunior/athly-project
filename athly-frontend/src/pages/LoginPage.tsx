@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button, Card, GradientText, Badge, Divider } from "@/components/ui";
 import { Input } from "@/components/ui/Input";
 import { useAuthStore } from "@/store/authStore";
-import { login } from "@/services/authService";
+import { login, getStravaAuthUrl } from "@/services/authService";
 import toast from "react-hot-toast";
 
 export function LoginPage() {
@@ -94,6 +94,28 @@ export function LoginPage() {
                 glow
               >
                 🚀 Entrar
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                fullWidth
+                size="lg"
+                onClick={async () => {
+                  setLoading(true);
+                  try {
+                    const { url } = await getStravaAuthUrl();
+                    window.location.href = url;
+                  } catch (err) {
+                    setLoading(false);
+                    toast.error("Erro ao redirecionar para o Strava.");
+                  }
+                }}
+                disabled={loading}
+                className="mt-4 border-[#fc4c02] text-[#fc4c02] hover:bg-[#fc4c02]/10"
+              >
+                <span className="mr-2 text-xl font-bold">strava</span>
+                Continuar com Strava
               </Button>
             </form>
 

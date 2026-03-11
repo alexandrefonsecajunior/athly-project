@@ -15,16 +15,16 @@
 
 import * as runtime from '../runtime';
 import type {
+  AuthControllerGetStravaAuthUrl200Response,
   IntegrationModel,
-  IntegrationsControllerGetStravaAuthUrl200Response,
   IntegrationsControllerSyncStrava200Response,
   StravaCallbackDto,
 } from '../models/index';
 import {
+    AuthControllerGetStravaAuthUrl200ResponseFromJSON,
+    AuthControllerGetStravaAuthUrl200ResponseToJSON,
     IntegrationModelFromJSON,
     IntegrationModelToJSON,
-    IntegrationsControllerGetStravaAuthUrl200ResponseFromJSON,
-    IntegrationsControllerGetStravaAuthUrl200ResponseToJSON,
     IntegrationsControllerSyncStrava200ResponseFromJSON,
     IntegrationsControllerSyncStrava200ResponseToJSON,
     StravaCallbackDtoFromJSON,
@@ -221,16 +221,16 @@ export class IntegrationsApi extends runtime.BaseAPI {
 
     /**
      */
-    async integrationsControllerGetStravaAuthUrlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<IntegrationsControllerGetStravaAuthUrl200Response>> {
+    async integrationsControllerGetStravaAuthUrlRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AuthControllerGetStravaAuthUrl200Response>> {
         const requestOptions = await this.integrationsControllerGetStravaAuthUrlRequestOpts();
         const response = await this.request(requestOptions, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => IntegrationsControllerGetStravaAuthUrl200ResponseFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => AuthControllerGetStravaAuthUrl200ResponseFromJSON(jsonValue));
     }
 
     /**
      */
-    async integrationsControllerGetStravaAuthUrl(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<IntegrationsControllerGetStravaAuthUrl200Response> {
+    async integrationsControllerGetStravaAuthUrl(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AuthControllerGetStravaAuthUrl200Response> {
         const response = await this.integrationsControllerGetStravaAuthUrlRaw(initOverrides);
         return await response.value();
     }

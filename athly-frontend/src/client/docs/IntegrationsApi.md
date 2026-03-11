@@ -217,7 +217,7 @@ This endpoint does not need any parameter.
 
 ## integrationsControllerGetStravaAuthUrl
 
-> IntegrationsControllerGetStravaAuthUrl200Response integrationsControllerGetStravaAuthUrl()
+> AuthControllerGetStravaAuthUrl200Response integrationsControllerGetStravaAuthUrl()
 
 
 
@@ -256,7 +256,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**IntegrationsControllerGetStravaAuthUrl200Response**](IntegrationsControllerGetStravaAuthUrl200Response.md)
+[**AuthControllerGetStravaAuthUrl200Response**](AuthControllerGetStravaAuthUrl200Response.md)
 
 ### Authorization
 
