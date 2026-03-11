@@ -72,7 +72,7 @@ This endpoint does not need any parameter.
 
 ## usersControllerUpdateProfile
 
-> UserModel usersControllerUpdateProfile(updateProfileInput)
+> UserModel usersControllerUpdateProfile(updateProfileDto)
 
 
 
@@ -94,8 +94,8 @@ async function example() {
   const api = new UsersApi(config);
 
   const body = {
-    // UpdateProfileInput
-    updateProfileInput: ...,
+    // UpdateProfileDto
+    updateProfileDto: ...,
   } satisfies UsersControllerUpdateProfileRequest;
 
   try {
@@ -115,7 +115,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **updateProfileInput** | [UpdateProfileInput](UpdateProfileInput.md) |  | |
+| **updateProfileDto** | [UpdateProfileDto](UpdateProfileDto.md) |  | |
 
 ### Return type
 

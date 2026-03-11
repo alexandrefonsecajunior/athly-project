@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma, WeeklyGoalStatus } from '@prisma/client';
 import { PrismaService } from '../../database/prisma.service';
-import { CreateWeeklyGoalInput } from './dto/create-weekly-goal.dto';
-import { UpdateWeeklyGoalInput } from './dto/update-weekly-goal.dto';
+import { CreateWeeklyGoalDto } from './dto/create-weekly-goal.dto';
+import { UpdateWeeklyGoalDto } from './dto/update-weekly-goal.dto';
 import { WeeklyGoalModel } from './models/weekly-goal.model';
 
 @Injectable()
 export class WeeklyGoalsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createWeeklyGoal(userId: string, input: CreateWeeklyGoalInput): Promise<WeeklyGoalModel> {
+  async createWeeklyGoal(userId: string, input: CreateWeeklyGoalDto): Promise<WeeklyGoalModel> {
     const plan = await this.prisma.trainingPlan.findUnique({
       where: { id: input.trainingPlanId },
     });
@@ -87,7 +87,7 @@ export class WeeklyGoalsService {
   async updateWeeklyGoal(
     userId: string,
     id: string,
-    input: UpdateWeeklyGoalInput,
+    input: UpdateWeeklyGoalDto,
   ): Promise<WeeklyGoalModel> {
     const existing = await this.prisma.weeklyGoal.findUnique({
       where: { id },

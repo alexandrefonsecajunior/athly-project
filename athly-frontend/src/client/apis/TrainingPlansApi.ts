@@ -15,21 +15,21 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateTrainingPlanInput,
+  CreateTrainingPlanDto,
   TrainingPlanModel,
-  UpdateTrainingPlanInput,
+  UpdateTrainingPlanDto,
 } from '../models/index';
 import {
-    CreateTrainingPlanInputFromJSON,
-    CreateTrainingPlanInputToJSON,
+    CreateTrainingPlanDtoFromJSON,
+    CreateTrainingPlanDtoToJSON,
     TrainingPlanModelFromJSON,
     TrainingPlanModelToJSON,
-    UpdateTrainingPlanInputFromJSON,
-    UpdateTrainingPlanInputToJSON,
+    UpdateTrainingPlanDtoFromJSON,
+    UpdateTrainingPlanDtoToJSON,
 } from '../models/index';
 
 export interface TrainingPlansControllerCreateTrainingPlanRequest {
-    createTrainingPlanInput: CreateTrainingPlanInput;
+    createTrainingPlanDto: CreateTrainingPlanDto;
 }
 
 export interface TrainingPlansControllerDeleteTrainingPlanRequest {
@@ -42,7 +42,7 @@ export interface TrainingPlansControllerGetTrainingPlanByIdRequest {
 
 export interface TrainingPlansControllerUpdateTrainingPlanRequest {
     id: string;
-    updateTrainingPlanInput: UpdateTrainingPlanInput;
+    updateTrainingPlanDto: UpdateTrainingPlanDto;
 }
 
 /**
@@ -54,10 +54,10 @@ export class TrainingPlansApi extends runtime.BaseAPI {
      * Creates request options for trainingPlansControllerCreateTrainingPlan without sending the request
      */
     async trainingPlansControllerCreateTrainingPlanRequestOpts(requestParameters: TrainingPlansControllerCreateTrainingPlanRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createTrainingPlanInput'] == null) {
+        if (requestParameters['createTrainingPlanDto'] == null) {
             throw new runtime.RequiredError(
-                'createTrainingPlanInput',
-                'Required parameter "createTrainingPlanInput" was null or undefined when calling trainingPlansControllerCreateTrainingPlan().'
+                'createTrainingPlanDto',
+                'Required parameter "createTrainingPlanDto" was null or undefined when calling trainingPlansControllerCreateTrainingPlan().'
             );
         }
 
@@ -83,7 +83,7 @@ export class TrainingPlansApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateTrainingPlanInputToJSON(requestParameters['createTrainingPlanInput']),
+            body: CreateTrainingPlanDtoToJSON(requestParameters['createTrainingPlanDto']),
         };
     }
 
@@ -258,10 +258,10 @@ export class TrainingPlansApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['updateTrainingPlanInput'] == null) {
+        if (requestParameters['updateTrainingPlanDto'] == null) {
             throw new runtime.RequiredError(
-                'updateTrainingPlanInput',
-                'Required parameter "updateTrainingPlanInput" was null or undefined when calling trainingPlansControllerUpdateTrainingPlan().'
+                'updateTrainingPlanDto',
+                'Required parameter "updateTrainingPlanDto" was null or undefined when calling trainingPlansControllerUpdateTrainingPlan().'
             );
         }
 
@@ -288,7 +288,7 @@ export class TrainingPlansApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateTrainingPlanInputToJSON(requestParameters['updateTrainingPlanInput']),
+            body: UpdateTrainingPlanDtoToJSON(requestParameters['updateTrainingPlanDto']),
         };
     }
 

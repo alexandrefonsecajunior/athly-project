@@ -1,6 +1,8 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
 
-export class StravaCallbackInput {
+export class StravaCallbackDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   code: string;

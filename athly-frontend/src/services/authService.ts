@@ -1,17 +1,17 @@
-import type { UserModel, AuthPayload, RegisterUserInput } from '@/client'
+import type { UserModel, AuthPayload, RegisterUserDto } from '@/client'
 import { api } from './api'
 
 export async function login(email: string, password: string): Promise<AuthPayload> {
   const data = await api.auth.authControllerLogin({
-    loginInput: { email, password }
+    loginDto: { email, password }
   })
   api.setToken(data.accessToken)
   return data
 }
 
-export async function register(data: RegisterUserInput): Promise<AuthPayload> {
+export async function register(data: RegisterUserDto): Promise<AuthPayload> {
   const result = await api.auth.authControllerRegister({
-    registerUserInput: data
+    registerUserDto: data
   })
   api.setToken(result.accessToken)
   return result

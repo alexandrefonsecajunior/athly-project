@@ -7,11 +7,11 @@ import type {
   WeeklyGoalModel as GeneratedWeeklyGoalModel,
   WorkoutFeedbackModel,
   IntegrationModel,
-  UpdateProfileInput as GeneratedUpdateProfileInput,
+  UpdateProfileDto as GeneratedUpdateProfileDto,
   WorkoutModelSportTypeEnum,
   WorkoutModelStatusEnum,
-  UpdateWorkoutInput as GeneratedUpdateWorkoutInput,
-  WorkoutBlockInput as GeneratedWorkoutBlockInput,
+  UpdateWorkoutDto as GeneratedUpdateWorkoutDto,
+  WorkoutBlockDto as GeneratedWorkoutBlockDto,
 } from '@/client'
 
 // ========================================
@@ -25,9 +25,9 @@ export type WorkoutBlock = GeneratedWorkoutBlock
 export type WeeklyGoal = GeneratedWeeklyGoalModel
 export type WorkoutFeedback = WorkoutFeedbackModel
 export type Integration = IntegrationModel
-export type UpdateProfileInput = GeneratedUpdateProfileInput
-export type UpdateWorkoutInput = GeneratedUpdateWorkoutInput
-export type WorkoutBlockInput = GeneratedWorkoutBlockInput
+export type UpdateProfileInput = GeneratedUpdateProfileDto
+export type UpdateWorkoutInput = GeneratedUpdateWorkoutDto
+export type WorkoutBlockInput = GeneratedWorkoutBlockDto
 export type BackendTrainingPlan = GeneratedTrainingPlanModel
 
 // ========================================

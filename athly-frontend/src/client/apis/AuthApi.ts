@@ -16,24 +16,24 @@
 import * as runtime from '../runtime';
 import type {
   AuthPayload,
-  LoginInput,
-  RegisterUserInput,
+  LoginDto,
+  RegisterUserDto,
 } from '../models/index';
 import {
     AuthPayloadFromJSON,
     AuthPayloadToJSON,
-    LoginInputFromJSON,
-    LoginInputToJSON,
-    RegisterUserInputFromJSON,
-    RegisterUserInputToJSON,
+    LoginDtoFromJSON,
+    LoginDtoToJSON,
+    RegisterUserDtoFromJSON,
+    RegisterUserDtoToJSON,
 } from '../models/index';
 
 export interface AuthControllerLoginRequest {
-    loginInput: LoginInput;
+    loginDto: LoginDto;
 }
 
 export interface AuthControllerRegisterRequest {
-    registerUserInput: RegisterUserInput;
+    registerUserDto: RegisterUserDto;
 }
 
 /**
@@ -45,10 +45,10 @@ export class AuthApi extends runtime.BaseAPI {
      * Creates request options for authControllerLogin without sending the request
      */
     async authControllerLoginRequestOpts(requestParameters: AuthControllerLoginRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['loginInput'] == null) {
+        if (requestParameters['loginDto'] == null) {
             throw new runtime.RequiredError(
-                'loginInput',
-                'Required parameter "loginInput" was null or undefined when calling authControllerLogin().'
+                'loginDto',
+                'Required parameter "loginDto" was null or undefined when calling authControllerLogin().'
             );
         }
 
@@ -66,7 +66,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: LoginInputToJSON(requestParameters['loginInput']),
+            body: LoginDtoToJSON(requestParameters['loginDto']),
         };
     }
 
@@ -90,10 +90,10 @@ export class AuthApi extends runtime.BaseAPI {
      * Creates request options for authControllerRegister without sending the request
      */
     async authControllerRegisterRequestOpts(requestParameters: AuthControllerRegisterRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['registerUserInput'] == null) {
+        if (requestParameters['registerUserDto'] == null) {
             throw new runtime.RequiredError(
-                'registerUserInput',
-                'Required parameter "registerUserInput" was null or undefined when calling authControllerRegister().'
+                'registerUserDto',
+                'Required parameter "registerUserDto" was null or undefined when calling authControllerRegister().'
             );
         }
 
@@ -111,7 +111,7 @@ export class AuthApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: RegisterUserInputToJSON(requestParameters['registerUserInput']),
+            body: RegisterUserDtoToJSON(requestParameters['registerUserDto']),
         };
     }
 

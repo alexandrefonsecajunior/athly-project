@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 
 ## trainingPlansControllerCreateTrainingPlan
 
-> TrainingPlanModel trainingPlansControllerCreateTrainingPlan(createTrainingPlanInput)
+> TrainingPlanModel trainingPlansControllerCreateTrainingPlan(createTrainingPlanDto)
 
 
 
@@ -36,8 +36,8 @@ async function example() {
   const api = new TrainingPlansApi(config);
 
   const body = {
-    // CreateTrainingPlanInput
-    createTrainingPlanInput: ...,
+    // CreateTrainingPlanDto
+    createTrainingPlanDto: ...,
   } satisfies TrainingPlansControllerCreateTrainingPlanRequest;
 
   try {
@@ -57,7 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createTrainingPlanInput** | [CreateTrainingPlanInput](CreateTrainingPlanInput.md) |  | |
+| **createTrainingPlanDto** | [CreateTrainingPlanDto](CreateTrainingPlanDto.md) |  | |
 
 ### Return type
 
@@ -282,7 +282,7 @@ example().catch(console.error);
 
 ## trainingPlansControllerUpdateTrainingPlan
 
-> TrainingPlanModel trainingPlansControllerUpdateTrainingPlan(id, updateTrainingPlanInput)
+> TrainingPlanModel trainingPlansControllerUpdateTrainingPlan(id, updateTrainingPlanDto)
 
 
 
@@ -306,8 +306,8 @@ async function example() {
   const body = {
     // string
     id: id_example,
-    // UpdateTrainingPlanInput
-    updateTrainingPlanInput: ...,
+    // UpdateTrainingPlanDto
+    updateTrainingPlanDto: ...,
   } satisfies TrainingPlansControllerUpdateTrainingPlanRequest;
 
   try {
@@ -328,7 +328,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **id** | `string` |  | [Defaults to `undefined`] |
-| **updateTrainingPlanInput** | [UpdateTrainingPlanInput](UpdateTrainingPlanInput.md) |  | |
+| **updateTrainingPlanDto** | [UpdateTrainingPlanDto](UpdateTrainingPlanDto.md) |  | |
 
 ### Return type
 

@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../database/prisma.service';
 import { UsersService } from '../users/users.service';
 import { User } from '@prisma/client';
-import { RegisterUserInput } from './dto/register-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +22,7 @@ export class AuthService {
     private readonly config: ConfigService,
   ) {}
 
-  async register(input: RegisterUserInput) {
+  async register(input: RegisterUserDto) {
     if (input.password !== input.confirmPassword) {
       throw new BadRequestException('As senhas não coincidem');
     }

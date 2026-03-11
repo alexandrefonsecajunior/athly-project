@@ -15,21 +15,21 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateWeeklyGoalInput,
-  UpdateWeeklyGoalInput,
+  CreateWeeklyGoalDto,
+  UpdateWeeklyGoalDto,
   WeeklyGoalModel,
 } from '../models/index';
 import {
-    CreateWeeklyGoalInputFromJSON,
-    CreateWeeklyGoalInputToJSON,
-    UpdateWeeklyGoalInputFromJSON,
-    UpdateWeeklyGoalInputToJSON,
+    CreateWeeklyGoalDtoFromJSON,
+    CreateWeeklyGoalDtoToJSON,
+    UpdateWeeklyGoalDtoFromJSON,
+    UpdateWeeklyGoalDtoToJSON,
     WeeklyGoalModelFromJSON,
     WeeklyGoalModelToJSON,
 } from '../models/index';
 
 export interface WeeklyGoalsControllerCreateWeeklyGoalRequest {
-    createWeeklyGoalInput: CreateWeeklyGoalInput;
+    createWeeklyGoalDto: CreateWeeklyGoalDto;
 }
 
 export interface WeeklyGoalsControllerDeleteWeeklyGoalRequest {
@@ -46,7 +46,7 @@ export interface WeeklyGoalsControllerGetWeeklyGoalsByTrainingPlanRequest {
 
 export interface WeeklyGoalsControllerUpdateWeeklyGoalRequest {
     uuid: string;
-    updateWeeklyGoalInput: UpdateWeeklyGoalInput;
+    updateWeeklyGoalDto: UpdateWeeklyGoalDto;
 }
 
 /**
@@ -58,10 +58,10 @@ export class WeeklyGoalsApi extends runtime.BaseAPI {
      * Creates request options for weeklyGoalsControllerCreateWeeklyGoal without sending the request
      */
     async weeklyGoalsControllerCreateWeeklyGoalRequestOpts(requestParameters: WeeklyGoalsControllerCreateWeeklyGoalRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createWeeklyGoalInput'] == null) {
+        if (requestParameters['createWeeklyGoalDto'] == null) {
             throw new runtime.RequiredError(
-                'createWeeklyGoalInput',
-                'Required parameter "createWeeklyGoalInput" was null or undefined when calling weeklyGoalsControllerCreateWeeklyGoal().'
+                'createWeeklyGoalDto',
+                'Required parameter "createWeeklyGoalDto" was null or undefined when calling weeklyGoalsControllerCreateWeeklyGoal().'
             );
         }
 
@@ -87,7 +87,7 @@ export class WeeklyGoalsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateWeeklyGoalInputToJSON(requestParameters['createWeeklyGoalInput']),
+            body: CreateWeeklyGoalDtoToJSON(requestParameters['createWeeklyGoalDto']),
         };
     }
 
@@ -270,10 +270,10 @@ export class WeeklyGoalsApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['updateWeeklyGoalInput'] == null) {
+        if (requestParameters['updateWeeklyGoalDto'] == null) {
             throw new runtime.RequiredError(
-                'updateWeeklyGoalInput',
-                'Required parameter "updateWeeklyGoalInput" was null or undefined when calling weeklyGoalsControllerUpdateWeeklyGoal().'
+                'updateWeeklyGoalDto',
+                'Required parameter "updateWeeklyGoalDto" was null or undefined when calling weeklyGoalsControllerUpdateWeeklyGoal().'
             );
         }
 
@@ -300,7 +300,7 @@ export class WeeklyGoalsApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateWeeklyGoalInputToJSON(requestParameters['updateWeeklyGoalInput']),
+            body: UpdateWeeklyGoalDtoToJSON(requestParameters['updateWeeklyGoalDto']),
         };
     }
 

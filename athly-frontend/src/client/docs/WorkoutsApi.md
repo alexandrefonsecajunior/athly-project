@@ -87,7 +87,7 @@ example().catch(console.error);
 
 ## workoutsControllerCreateWorkout
 
-> WorkoutModel workoutsControllerCreateWorkout(createWorkoutInput)
+> WorkoutModel workoutsControllerCreateWorkout(createWorkoutDto)
 
 
 
@@ -109,8 +109,8 @@ async function example() {
   const api = new WorkoutsApi(config);
 
   const body = {
-    // CreateWorkoutInput
-    createWorkoutInput: ...,
+    // CreateWorkoutDto
+    createWorkoutDto: ...,
   } satisfies WorkoutsControllerCreateWorkoutRequest;
 
   try {
@@ -130,7 +130,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createWorkoutInput** | [CreateWorkoutInput](CreateWorkoutInput.md) |  | |
+| **createWorkoutDto** | [CreateWorkoutDto](CreateWorkoutDto.md) |  | |
 
 ### Return type
 
@@ -225,7 +225,7 @@ example().catch(console.error);
 
 ## workoutsControllerSubmitWorkoutFeedback
 
-> WorkoutFeedbackModel workoutsControllerSubmitWorkoutFeedback(workoutId, submitWorkoutFeedbackInput)
+> WorkoutFeedbackModel workoutsControllerSubmitWorkoutFeedback(workoutId, submitWorkoutFeedbackDto)
 
 
 
@@ -249,8 +249,8 @@ async function example() {
   const body = {
     // string
     workoutId: workoutId_example,
-    // SubmitWorkoutFeedbackInput
-    submitWorkoutFeedbackInput: ...,
+    // SubmitWorkoutFeedbackDto
+    submitWorkoutFeedbackDto: ...,
   } satisfies WorkoutsControllerSubmitWorkoutFeedbackRequest;
 
   try {
@@ -271,7 +271,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **workoutId** | `string` |  | [Defaults to `undefined`] |
-| **submitWorkoutFeedbackInput** | [SubmitWorkoutFeedbackInput](SubmitWorkoutFeedbackInput.md) |  | |
+| **submitWorkoutFeedbackDto** | [SubmitWorkoutFeedbackDto](SubmitWorkoutFeedbackDto.md) |  | |
 
 ### Return type
 
@@ -358,7 +358,7 @@ This endpoint does not need any parameter.
 
 ## workoutsControllerUpdateWorkout
 
-> WorkoutModel workoutsControllerUpdateWorkout(workoutId, updateWorkoutInput)
+> WorkoutModel workoutsControllerUpdateWorkout(workoutId, updateWorkoutDto)
 
 
 
@@ -382,8 +382,8 @@ async function example() {
   const body = {
     // string
     workoutId: workoutId_example,
-    // UpdateWorkoutInput
-    updateWorkoutInput: ...,
+    // UpdateWorkoutDto
+    updateWorkoutDto: ...,
   } satisfies WorkoutsControllerUpdateWorkoutRequest;
 
   try {
@@ -404,7 +404,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **workoutId** | `string` |  | [Defaults to `undefined`] |
-| **updateWorkoutInput** | [UpdateWorkoutInput](UpdateWorkoutInput.md) |  | |
+| **updateWorkoutDto** | [UpdateWorkoutDto](UpdateWorkoutDto.md) |  | |
 
 ### Return type
 

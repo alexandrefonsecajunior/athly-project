@@ -10,7 +10,7 @@ All URIs are relative to *http://localhost*
 
 ## aiPlannerControllerPlanNextWeek
 
-> AiPlannerResultModel aiPlannerControllerPlanNextWeek(planNextWeekInput)
+> AiPlannerResultModel aiPlannerControllerPlanNextWeek(planNextWeekDto)
 
 
 
@@ -32,8 +32,8 @@ async function example() {
   const api = new AiPlannerApi(config);
 
   const body = {
-    // PlanNextWeekInput
-    planNextWeekInput: ...,
+    // PlanNextWeekDto
+    planNextWeekDto: ...,
   } satisfies AiPlannerControllerPlanNextWeekRequest;
 
   try {
@@ -53,7 +53,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **planNextWeekInput** | [PlanNextWeekInput](PlanNextWeekInput.md) |  | |
+| **planNextWeekDto** | [PlanNextWeekDto](PlanNextWeekDto.md) |  | |
 
 ### Return type
 

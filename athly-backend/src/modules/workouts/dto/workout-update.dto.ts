@@ -13,7 +13,7 @@ import {
 } from 'class-validator';
 import { SportType, WorkoutStatus } from '@prisma/client';
 
-export class UpdateWorkoutInput {
+export class UpdateWorkoutDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
@@ -24,11 +24,11 @@ export class UpdateWorkoutInput {
   @IsString()
   description?: string;
 
-  @ApiPropertyOptional({ type: () => [WorkoutBlockInput] })
+  @ApiPropertyOptional({ type: () => [WorkoutBlockDto] })
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => WorkoutBlockInput)
-  blocks?: WorkoutBlockInput[];
+  @Type(() => WorkoutBlockDto)
+  blocks?: WorkoutBlockDto[];
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -53,7 +53,7 @@ export class UpdateWorkoutInput {
   date?: string;
 }
 
-export class WorkoutBlockInput {
+export class WorkoutBlockDto {
   @ApiProperty()
   @IsString()
   type: string;

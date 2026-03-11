@@ -29,7 +29,7 @@ export async function initiateStravaOAuth(): Promise<void> {
 
 export async function handleStravaCallback(code: string): Promise<Integration> {
   return api.integrations.integrationsControllerHandleStravaCallback({
-    stravaCallbackInput: { code }
+    stravaCallbackDto: { code }
   })
 }
 

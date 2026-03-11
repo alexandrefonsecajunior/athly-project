@@ -15,18 +15,18 @@
 
 import * as runtime from '../runtime';
 import type {
-  UpdateProfileInput,
+  UpdateProfileDto,
   UserModel,
 } from '../models/index';
 import {
-    UpdateProfileInputFromJSON,
-    UpdateProfileInputToJSON,
+    UpdateProfileDtoFromJSON,
+    UpdateProfileDtoToJSON,
     UserModelFromJSON,
     UserModelToJSON,
 } from '../models/index';
 
 export interface UsersControllerUpdateProfileRequest {
-    updateProfileInput: UpdateProfileInput;
+    updateProfileDto: UpdateProfileDto;
 }
 
 /**
@@ -81,10 +81,10 @@ export class UsersApi extends runtime.BaseAPI {
      * Creates request options for usersControllerUpdateProfile without sending the request
      */
     async usersControllerUpdateProfileRequestOpts(requestParameters: UsersControllerUpdateProfileRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['updateProfileInput'] == null) {
+        if (requestParameters['updateProfileDto'] == null) {
             throw new runtime.RequiredError(
-                'updateProfileInput',
-                'Required parameter "updateProfileInput" was null or undefined when calling usersControllerUpdateProfile().'
+                'updateProfileDto',
+                'Required parameter "updateProfileDto" was null or undefined when calling usersControllerUpdateProfile().'
             );
         }
 
@@ -110,7 +110,7 @@ export class UsersApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateProfileInputToJSON(requestParameters['updateProfileInput']),
+            body: UpdateProfileDtoToJSON(requestParameters['updateProfileDto']),
         };
     }
 

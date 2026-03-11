@@ -13,6 +13,6 @@ export async function updateProfile(data: Partial<User>): Promise<User> {
     availability: data.availability ?? undefined,
   }
   return api.users.usersControllerUpdateProfile({
-    updateProfileInput: input
+    updateProfileDto: input
   })
 }

@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateEquipmentInput,
-  UpdateEquipmentInput,
+  CreateEquipmentDto,
+  UpdateEquipmentDto,
 } from '../models/index';
 import {
-    CreateEquipmentInputFromJSON,
-    CreateEquipmentInputToJSON,
-    UpdateEquipmentInputFromJSON,
-    UpdateEquipmentInputToJSON,
+    CreateEquipmentDtoFromJSON,
+    CreateEquipmentDtoToJSON,
+    UpdateEquipmentDtoFromJSON,
+    UpdateEquipmentDtoToJSON,
 } from '../models/index';
 
 export interface EquipmentsControllerAddEquipmentToUserRequest {
@@ -30,7 +30,7 @@ export interface EquipmentsControllerAddEquipmentToUserRequest {
 }
 
 export interface EquipmentsControllerCreateEquipmentRequest {
-    createEquipmentInput: CreateEquipmentInput;
+    createEquipmentDto: CreateEquipmentDto;
 }
 
 export interface EquipmentsControllerDeleteEquipmentRequest {
@@ -47,7 +47,7 @@ export interface EquipmentsControllerRemoveEquipmentFromUserRequest {
 
 export interface EquipmentsControllerUpdateEquipmentRequest {
     uuid: string;
-    updateEquipmentInput: UpdateEquipmentInput;
+    updateEquipmentDto: UpdateEquipmentDto;
 }
 
 /**
@@ -101,10 +101,10 @@ export class EquipmentsApi extends runtime.BaseAPI {
      * Creates request options for equipmentsControllerCreateEquipment without sending the request
      */
     async equipmentsControllerCreateEquipmentRequestOpts(requestParameters: EquipmentsControllerCreateEquipmentRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createEquipmentInput'] == null) {
+        if (requestParameters['createEquipmentDto'] == null) {
             throw new runtime.RequiredError(
-                'createEquipmentInput',
-                'Required parameter "createEquipmentInput" was null or undefined when calling equipmentsControllerCreateEquipment().'
+                'createEquipmentDto',
+                'Required parameter "createEquipmentDto" was null or undefined when calling equipmentsControllerCreateEquipment().'
             );
         }
 
@@ -122,7 +122,7 @@ export class EquipmentsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateEquipmentInputToJSON(requestParameters['createEquipmentInput']),
+            body: CreateEquipmentDtoToJSON(requestParameters['createEquipmentDto']),
         };
     }
 
@@ -350,10 +350,10 @@ export class EquipmentsApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['updateEquipmentInput'] == null) {
+        if (requestParameters['updateEquipmentDto'] == null) {
             throw new runtime.RequiredError(
-                'updateEquipmentInput',
-                'Required parameter "updateEquipmentInput" was null or undefined when calling equipmentsControllerUpdateEquipment().'
+                'updateEquipmentDto',
+                'Required parameter "updateEquipmentDto" was null or undefined when calling equipmentsControllerUpdateEquipment().'
             );
         }
 
@@ -372,7 +372,7 @@ export class EquipmentsApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateEquipmentInputToJSON(requestParameters['updateEquipmentInput']),
+            body: UpdateEquipmentDtoToJSON(requestParameters['updateEquipmentDto']),
         };
     }
 

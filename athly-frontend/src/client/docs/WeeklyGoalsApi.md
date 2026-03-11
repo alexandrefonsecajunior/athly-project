@@ -14,7 +14,7 @@ All URIs are relative to *http://localhost*
 
 ## weeklyGoalsControllerCreateWeeklyGoal
 
-> WeeklyGoalModel weeklyGoalsControllerCreateWeeklyGoal(createWeeklyGoalInput)
+> WeeklyGoalModel weeklyGoalsControllerCreateWeeklyGoal(createWeeklyGoalDto)
 
 
 
@@ -36,8 +36,8 @@ async function example() {
   const api = new WeeklyGoalsApi(config);
 
   const body = {
-    // CreateWeeklyGoalInput
-    createWeeklyGoalInput: ...,
+    // CreateWeeklyGoalDto
+    createWeeklyGoalDto: ...,
   } satisfies WeeklyGoalsControllerCreateWeeklyGoalRequest;
 
   try {
@@ -57,7 +57,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createWeeklyGoalInput** | [CreateWeeklyGoalInput](CreateWeeklyGoalInput.md) |  | |
+| **createWeeklyGoalDto** | [CreateWeeklyGoalDto](CreateWeeklyGoalDto.md) |  | |
 
 ### Return type
 
@@ -290,7 +290,7 @@ example().catch(console.error);
 
 ## weeklyGoalsControllerUpdateWeeklyGoal
 
-> WeeklyGoalModel weeklyGoalsControllerUpdateWeeklyGoal(uuid, updateWeeklyGoalInput)
+> WeeklyGoalModel weeklyGoalsControllerUpdateWeeklyGoal(uuid, updateWeeklyGoalDto)
 
 
 
@@ -314,8 +314,8 @@ async function example() {
   const body = {
     // string
     uuid: uuid_example,
-    // UpdateWeeklyGoalInput
-    updateWeeklyGoalInput: ...,
+    // UpdateWeeklyGoalDto
+    updateWeeklyGoalDto: ...,
   } satisfies WeeklyGoalsControllerUpdateWeeklyGoalRequest;
 
   try {
@@ -336,7 +336,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **uuid** | `string` |  | [Defaults to `undefined`] |
-| **updateWeeklyGoalInput** | [UpdateWeeklyGoalInput](UpdateWeeklyGoalInput.md) |  | |
+| **updateWeeklyGoalDto** | [UpdateWeeklyGoalDto](UpdateWeeklyGoalDto.md) |  | |
 
 ### Return type
 

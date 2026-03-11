@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost*
 
 ## authControllerLogin
 
-> AuthPayload authControllerLogin(loginInput)
+> AuthPayload authControllerLogin(loginDto)
 
 
 
@@ -29,8 +29,8 @@ async function example() {
   const api = new AuthApi();
 
   const body = {
-    // LoginInput
-    loginInput: ...,
+    // LoginDto
+    loginDto: ...,
   } satisfies AuthControllerLoginRequest;
 
   try {
@@ -50,7 +50,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **loginInput** | [LoginInput](LoginInput.md) |  | |
+| **loginDto** | [LoginDto](LoginDto.md) |  | |
 
 ### Return type
 
@@ -77,7 +77,7 @@ No authorization required
 
 ## authControllerRegister
 
-> AuthPayload authControllerRegister(registerUserInput)
+> AuthPayload authControllerRegister(registerUserDto)
 
 
 
@@ -95,8 +95,8 @@ async function example() {
   const api = new AuthApi();
 
   const body = {
-    // RegisterUserInput
-    registerUserInput: ...,
+    // RegisterUserDto
+    registerUserDto: ...,
   } satisfies AuthControllerRegisterRequest;
 
   try {
@@ -116,7 +116,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **registerUserInput** | [RegisterUserInput](RegisterUserInput.md) |  | |
+| **registerUserDto** | [RegisterUserDto](RegisterUserDto.md) |  | |
 
 ### Return type
 

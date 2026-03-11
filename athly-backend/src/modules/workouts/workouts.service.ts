@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { SubmitWorkoutFeedbackInput } from './dto/submit-workout-feedback.dto';
+import { SubmitWorkoutFeedbackDto } from './dto/submit-workout-feedback.dto';
 import { Prisma, WorkoutStatus } from '@prisma/client';
 import { WorkoutFeedbackModel, WorkoutModel } from './models/workout.model';
-import { UpdateWorkoutInput } from './dto/workout-update.dto';
-import { CreateWorkoutInput } from './dto/create-workout.dto';
+import { UpdateWorkoutDto } from './dto/workout-update.dto';
+import { CreateWorkoutDto } from './dto/create-workout.dto';
 
 @Injectable()
 export class WorkoutsService {
@@ -35,7 +35,7 @@ export class WorkoutsService {
     return workout ? this.mapWorkout(workout) : null;
   }
 
-  async createWorkout(userId: string, input: CreateWorkoutInput): Promise<WorkoutModel> {
+  async createWorkout(userId: string, input: CreateWorkoutDto): Promise<WorkoutModel> {
     const blocks = (input.blocks ?? []).map((block) => ({
       type: block.type,
       duration: block.duration ?? undefined,
@@ -96,7 +96,7 @@ export class WorkoutsService {
   async submitWorkoutFeedback(
     userId: string,
     workoutId: string,
-    input: SubmitWorkoutFeedbackInput,
+    input: SubmitWorkoutFeedbackDto,
   ): Promise<WorkoutFeedbackModel> {
     const workout = await this.prisma.workout.findFirst({
       where: { id: workoutId, userId },
@@ -181,7 +181,7 @@ export class WorkoutsService {
     };
   }
 
-  async updateWorkout(workoutId: string, input: UpdateWorkoutInput): Promise<WorkoutModel> {
+  async updateWorkout(workoutId: string, input: UpdateWorkoutDto): Promise<WorkoutModel> {
     console.log('chegou aqui');
     const workout = await this.prisma.workout.findFirst({
       where: { id: workoutId },

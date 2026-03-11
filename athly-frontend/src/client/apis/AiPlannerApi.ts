@@ -16,17 +16,17 @@
 import * as runtime from '../runtime';
 import type {
   AiPlannerResultModel,
-  PlanNextWeekInput,
+  PlanNextWeekDto,
 } from '../models/index';
 import {
     AiPlannerResultModelFromJSON,
     AiPlannerResultModelToJSON,
-    PlanNextWeekInputFromJSON,
-    PlanNextWeekInputToJSON,
+    PlanNextWeekDtoFromJSON,
+    PlanNextWeekDtoToJSON,
 } from '../models/index';
 
 export interface AiPlannerControllerPlanNextWeekRequest {
-    planNextWeekInput: PlanNextWeekInput;
+    planNextWeekDto: PlanNextWeekDto;
 }
 
 /**
@@ -38,10 +38,10 @@ export class AiPlannerApi extends runtime.BaseAPI {
      * Creates request options for aiPlannerControllerPlanNextWeek without sending the request
      */
     async aiPlannerControllerPlanNextWeekRequestOpts(requestParameters: AiPlannerControllerPlanNextWeekRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['planNextWeekInput'] == null) {
+        if (requestParameters['planNextWeekDto'] == null) {
             throw new runtime.RequiredError(
-                'planNextWeekInput',
-                'Required parameter "planNextWeekInput" was null or undefined when calling aiPlannerControllerPlanNextWeek().'
+                'planNextWeekDto',
+                'Required parameter "planNextWeekDto" was null or undefined when calling aiPlannerControllerPlanNextWeek().'
             );
         }
 
@@ -67,7 +67,7 @@ export class AiPlannerApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: PlanNextWeekInputToJSON(requestParameters['planNextWeekInput']),
+            body: PlanNextWeekDtoToJSON(requestParameters['planNextWeekDto']),
         };
     }
 

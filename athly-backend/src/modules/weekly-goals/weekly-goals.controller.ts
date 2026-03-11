@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { WeeklyGoalsService } from './weekly-goals.service';
-import { CreateWeeklyGoalInput } from './dto/create-weekly-goal.dto';
-import { UpdateWeeklyGoalInput } from './dto/update-weekly-goal.dto';
+import { CreateWeeklyGoalDto } from './dto/create-weekly-goal.dto';
+import { UpdateWeeklyGoalDto } from './dto/update-weekly-goal.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user-rest.decorator';
 import { UserModel } from '../users/models/user.model';
@@ -41,7 +41,7 @@ export class WeeklyGoalsController {
 
   @Post()
   @ApiCreatedResponse({ type: WeeklyGoalModel })
-  createWeeklyGoal(@CurrentUser() user: UserModel, @Body() input: CreateWeeklyGoalInput): Promise<WeeklyGoalModel> {
+  createWeeklyGoal(@CurrentUser() user: UserModel, @Body() input: CreateWeeklyGoalDto): Promise<WeeklyGoalModel> {
     return this.weeklyGoalsService.createWeeklyGoal(user.id, input);
   }
 
@@ -50,7 +50,7 @@ export class WeeklyGoalsController {
   updateWeeklyGoal(
     @CurrentUser() user: UserModel,
     @Param('uuid') uuid: string,
-    @Body() input: UpdateWeeklyGoalInput,
+    @Body() input: UpdateWeeklyGoalDto,
   ): Promise<WeeklyGoalModel> {
     return this.weeklyGoalsService.updateWeeklyGoal(user.id, uuid, input);
   }

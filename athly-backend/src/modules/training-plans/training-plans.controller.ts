@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { TrainingPlansService } from './training-plans.service';
-import { CreateTrainingPlanInput } from './dto/create-training-plan.dto';
-import { UpdateTrainingPlanInput } from './dto/update-training-plan.dto';
+import { CreateTrainingPlanDto } from './dto/create-training-plan.dto';
+import { UpdateTrainingPlanDto } from './dto/update-training-plan.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user-rest.decorator';
 import { UserModel } from '../users/models/user.model';
@@ -29,7 +29,7 @@ export class TrainingPlansController {
 
   @Post()
   @ApiCreatedResponse({ type: TrainingPlanModel })
-  createTrainingPlan(@CurrentUser() user: UserModel, @Body() input: CreateTrainingPlanInput): Promise<TrainingPlanModel> {
+  createTrainingPlan(@CurrentUser() user: UserModel, @Body() input: CreateTrainingPlanDto): Promise<TrainingPlanModel> {
     return this.trainingPlansService.createTrainingPlan(user.id, input);
   }
 
@@ -38,7 +38,7 @@ export class TrainingPlansController {
   updateTrainingPlan(
     @CurrentUser() user: UserModel,
     @Param('id') id: string,
-    @Body() input: UpdateTrainingPlanInput,
+    @Body() input: UpdateTrainingPlanDto,
   ): Promise<TrainingPlanModel> {
     return this.trainingPlansService.updateTrainingPlan(user.id, id, input);
   }

@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
-import { CreateEquipmentInput } from './dto/create-equipment.dto';
-import { UpdateEquipmentInput } from './dto/update-equipment.dto';
+import { CreateEquipmentDto } from './dto/create-equipment.dto';
+import { UpdateEquipmentDto } from './dto/update-equipment.dto';
 import { EquipmentModel } from './models/equipment.model';
 
 @Injectable()
 export class EquipmentsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createEquipment(input: CreateEquipmentInput): Promise<EquipmentModel> {
+  async createEquipment(input: CreateEquipmentDto): Promise<EquipmentModel> {
     const equipment = await this.prisma.equipment.create({
       data: {
         name: input.name,
@@ -41,7 +41,7 @@ export class EquipmentsService {
 
   async updateEquipment(
     uuid: string,
-    input: UpdateEquipmentInput,
+    input: UpdateEquipmentDto,
   ): Promise<EquipmentModel> {
     const equipment = await this.prisma.equipment.update({
       where: { uuid },

@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { EquipmentsService } from './equipments.service';
-import { CreateEquipmentInput } from './dto/create-equipment.dto';
-import { UpdateEquipmentInput } from './dto/update-equipment.dto';
+import { CreateEquipmentDto } from './dto/create-equipment.dto';
+import { UpdateEquipmentDto } from './dto/update-equipment.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user-rest.decorator';
 import { UserModel } from '../users/models/user.model';
@@ -36,14 +36,14 @@ export class EquipmentsController {
   }
 
   @Post()
-  createEquipment(@Body() input: CreateEquipmentInput) {
+  createEquipment(@Body() input: CreateEquipmentDto) {
     return this.equipmentsService.createEquipment(input);
   }
 
   @Put(':uuid')
   updateEquipment(
     @Param('uuid') uuid: string,
-    @Body() input: UpdateEquipmentInput,
+    @Body() input: UpdateEquipmentDto,
   ) {
     return this.equipmentsService.updateEquipment(uuid, input);
   }

@@ -278,7 +278,7 @@ This endpoint does not need any parameter.
 
 ## integrationsControllerHandleStravaCallback
 
-> IntegrationModel integrationsControllerHandleStravaCallback(stravaCallbackInput)
+> IntegrationModel integrationsControllerHandleStravaCallback(stravaCallbackDto)
 
 
 
@@ -300,8 +300,8 @@ async function example() {
   const api = new IntegrationsApi(config);
 
   const body = {
-    // StravaCallbackInput
-    stravaCallbackInput: ...,
+    // StravaCallbackDto
+    stravaCallbackDto: ...,
   } satisfies IntegrationsControllerHandleStravaCallbackRequest;
 
   try {
@@ -321,7 +321,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **stravaCallbackInput** | [StravaCallbackInput](StravaCallbackInput.md) |  | |
+| **stravaCallbackDto** | [StravaCallbackDto](StravaCallbackDto.md) |  | |
 
 ### Return type
 

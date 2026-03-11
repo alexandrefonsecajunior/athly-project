@@ -82,7 +82,7 @@ No authorization required
 
 ## equipmentsControllerCreateEquipment
 
-> object equipmentsControllerCreateEquipment(createEquipmentInput)
+> object equipmentsControllerCreateEquipment(createEquipmentDto)
 
 
 
@@ -100,8 +100,8 @@ async function example() {
   const api = new EquipmentsApi();
 
   const body = {
-    // CreateEquipmentInput
-    createEquipmentInput: ...,
+    // CreateEquipmentDto
+    createEquipmentDto: ...,
   } satisfies EquipmentsControllerCreateEquipmentRequest;
 
   try {
@@ -121,7 +121,7 @@ example().catch(console.error);
 
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
-| **createEquipmentInput** | [CreateEquipmentInput](CreateEquipmentInput.md) |  | |
+| **createEquipmentDto** | [CreateEquipmentDto](CreateEquipmentDto.md) |  | |
 
 ### Return type
 
@@ -456,7 +456,7 @@ No authorization required
 
 ## equipmentsControllerUpdateEquipment
 
-> object equipmentsControllerUpdateEquipment(uuid, updateEquipmentInput)
+> object equipmentsControllerUpdateEquipment(uuid, updateEquipmentDto)
 
 
 
@@ -476,8 +476,8 @@ async function example() {
   const body = {
     // string
     uuid: uuid_example,
-    // UpdateEquipmentInput
-    updateEquipmentInput: ...,
+    // UpdateEquipmentDto
+    updateEquipmentDto: ...,
   } satisfies EquipmentsControllerUpdateEquipmentRequest;
 
   try {
@@ -498,7 +498,7 @@ example().catch(console.error);
 | Name | Type | Description  | Notes |
 |------------- | ------------- | ------------- | -------------|
 | **uuid** | `string` |  | [Defaults to `undefined`] |
-| **updateEquipmentInput** | [UpdateEquipmentInput](UpdateEquipmentInput.md) |  | |
+| **updateEquipmentDto** | [UpdateEquipmentDto](UpdateEquipmentDto.md) |  | |
 
 ### Return type
 

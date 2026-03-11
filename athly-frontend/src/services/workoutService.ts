@@ -88,7 +88,7 @@ export async function submitWorkoutFeedback(
   }
   return api.workouts.workoutsControllerSubmitWorkoutFeedback({
     workoutId,
-    submitWorkoutFeedbackInput: input
+    submitWorkoutFeedbackDto: input
   })
 }
 
@@ -117,12 +117,12 @@ export async function updateWorkout(
   }
   return api.workouts.workoutsControllerUpdateWorkout({
     workoutId,
-    updateWorkoutInput: updateInput
+    updateWorkoutDto: updateInput
   })
 }
 
 export async function planNextWeek(params?: { numberOfRuns?: number; weekStartDate?: string }) {
   return api.aiPlanner.aiPlannerControllerPlanNextWeek({
-    planNextWeekInput: params ?? {}
+    planNextWeekDto: params ?? {}
   })
 }

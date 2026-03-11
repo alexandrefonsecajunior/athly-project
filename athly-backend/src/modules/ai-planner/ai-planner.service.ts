@@ -6,7 +6,7 @@ import { Prisma, SportType, TrainingPlanStatus, WeeklyGoalStatus, WorkoutStatus 
 import { PrismaService } from '../../database/prisma.service';
 import { StravaService } from './strava.service';
 import { GeminiService } from './gemini.service';
-import { PlanNextWeekInput } from './dto/plan-next-week.dto';
+import { PlanNextWeekDto } from './dto/plan-next-week.dto';
 import type { AiPlannerInput, PlannerResults, RunSummary } from './types/planner.types';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AiPlannerService {
     private readonly geminiService: GeminiService,
   ) {}
 
-  async planNextWeek(userId: string, input: PlanNextWeekInput) {
+  async planNextWeek(userId: string, input: PlanNextWeekDto) {
     const startMonday = input.weekStartDate ? new Date(input.weekStartDate) : this.getNextMonday();
     const weekDates = this.getWeekDates(startMonday);
     const weekStartDate = new Date(weekDates[0]!);

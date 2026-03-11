@@ -15,19 +15,19 @@
 
 import * as runtime from '../runtime';
 import type {
-  CreateWorkoutInput,
-  SubmitWorkoutFeedbackInput,
-  UpdateWorkoutInput,
+  CreateWorkoutDto,
+  SubmitWorkoutFeedbackDto,
+  UpdateWorkoutDto,
   WorkoutFeedbackModel,
   WorkoutModel,
 } from '../models/index';
 import {
-    CreateWorkoutInputFromJSON,
-    CreateWorkoutInputToJSON,
-    SubmitWorkoutFeedbackInputFromJSON,
-    SubmitWorkoutFeedbackInputToJSON,
-    UpdateWorkoutInputFromJSON,
-    UpdateWorkoutInputToJSON,
+    CreateWorkoutDtoFromJSON,
+    CreateWorkoutDtoToJSON,
+    SubmitWorkoutFeedbackDtoFromJSON,
+    SubmitWorkoutFeedbackDtoToJSON,
+    UpdateWorkoutDtoFromJSON,
+    UpdateWorkoutDtoToJSON,
     WorkoutFeedbackModelFromJSON,
     WorkoutFeedbackModelToJSON,
     WorkoutModelFromJSON,
@@ -39,7 +39,7 @@ export interface WorkoutsControllerCompleteWorkoutRequest {
 }
 
 export interface WorkoutsControllerCreateWorkoutRequest {
-    createWorkoutInput: CreateWorkoutInput;
+    createWorkoutDto: CreateWorkoutDto;
 }
 
 export interface WorkoutsControllerSkipWorkoutRequest {
@@ -48,12 +48,12 @@ export interface WorkoutsControllerSkipWorkoutRequest {
 
 export interface WorkoutsControllerSubmitWorkoutFeedbackRequest {
     workoutId: string;
-    submitWorkoutFeedbackInput: SubmitWorkoutFeedbackInput;
+    submitWorkoutFeedbackDto: SubmitWorkoutFeedbackDto;
 }
 
 export interface WorkoutsControllerUpdateWorkoutRequest {
     workoutId: string;
-    updateWorkoutInput: UpdateWorkoutInput;
+    updateWorkoutDto: UpdateWorkoutDto;
 }
 
 export interface WorkoutsControllerWorkoutRequest {
@@ -124,10 +124,10 @@ export class WorkoutsApi extends runtime.BaseAPI {
      * Creates request options for workoutsControllerCreateWorkout without sending the request
      */
     async workoutsControllerCreateWorkoutRequestOpts(requestParameters: WorkoutsControllerCreateWorkoutRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['createWorkoutInput'] == null) {
+        if (requestParameters['createWorkoutDto'] == null) {
             throw new runtime.RequiredError(
-                'createWorkoutInput',
-                'Required parameter "createWorkoutInput" was null or undefined when calling workoutsControllerCreateWorkout().'
+                'createWorkoutDto',
+                'Required parameter "createWorkoutDto" was null or undefined when calling workoutsControllerCreateWorkout().'
             );
         }
 
@@ -153,7 +153,7 @@ export class WorkoutsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: CreateWorkoutInputToJSON(requestParameters['createWorkoutInput']),
+            body: CreateWorkoutDtoToJSON(requestParameters['createWorkoutDto']),
         };
     }
 
@@ -235,10 +235,10 @@ export class WorkoutsApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['submitWorkoutFeedbackInput'] == null) {
+        if (requestParameters['submitWorkoutFeedbackDto'] == null) {
             throw new runtime.RequiredError(
-                'submitWorkoutFeedbackInput',
-                'Required parameter "submitWorkoutFeedbackInput" was null or undefined when calling workoutsControllerSubmitWorkoutFeedback().'
+                'submitWorkoutFeedbackDto',
+                'Required parameter "submitWorkoutFeedbackDto" was null or undefined when calling workoutsControllerSubmitWorkoutFeedback().'
             );
         }
 
@@ -265,7 +265,7 @@ export class WorkoutsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: SubmitWorkoutFeedbackInputToJSON(requestParameters['submitWorkoutFeedbackInput']),
+            body: SubmitWorkoutFeedbackDtoToJSON(requestParameters['submitWorkoutFeedbackDto']),
         };
     }
 
@@ -339,10 +339,10 @@ export class WorkoutsApi extends runtime.BaseAPI {
             );
         }
 
-        if (requestParameters['updateWorkoutInput'] == null) {
+        if (requestParameters['updateWorkoutDto'] == null) {
             throw new runtime.RequiredError(
-                'updateWorkoutInput',
-                'Required parameter "updateWorkoutInput" was null or undefined when calling workoutsControllerUpdateWorkout().'
+                'updateWorkoutDto',
+                'Required parameter "updateWorkoutDto" was null or undefined when calling workoutsControllerUpdateWorkout().'
             );
         }
 
@@ -369,7 +369,7 @@ export class WorkoutsApi extends runtime.BaseAPI {
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,
-            body: UpdateWorkoutInputToJSON(requestParameters['updateWorkoutInput']),
+            body: UpdateWorkoutDtoToJSON(requestParameters['updateWorkoutDto']),
         };
     }
 

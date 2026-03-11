@@ -18,7 +18,7 @@ import type {
   IntegrationModel,
   IntegrationsControllerGetStravaAuthUrl200Response,
   IntegrationsControllerSyncStrava200Response,
-  StravaCallbackInput,
+  StravaCallbackDto,
 } from '../models/index';
 import {
     IntegrationModelFromJSON,
@@ -27,8 +27,8 @@ import {
     IntegrationsControllerGetStravaAuthUrl200ResponseToJSON,
     IntegrationsControllerSyncStrava200ResponseFromJSON,
     IntegrationsControllerSyncStrava200ResponseToJSON,
-    StravaCallbackInputFromJSON,
-    StravaCallbackInputToJSON,
+    StravaCallbackDtoFromJSON,
+    StravaCallbackDtoToJSON,
 } from '../models/index';
 
 export interface IntegrationsControllerConnectIntegrationRequest {
@@ -40,7 +40,7 @@ export interface IntegrationsControllerDisconnectIntegrationRequest {
 }
 
 export interface IntegrationsControllerHandleStravaCallbackRequest {
-    stravaCallbackInput: StravaCallbackInput;
+    stravaCallbackDto: StravaCallbackDto;
 }
 
 /**
@@ -239,10 +239,10 @@ export class IntegrationsApi extends runtime.BaseAPI {
      * Creates request options for integrationsControllerHandleStravaCallback without sending the request
      */
     async integrationsControllerHandleStravaCallbackRequestOpts(requestParameters: IntegrationsControllerHandleStravaCallbackRequest): Promise<runtime.RequestOpts> {
-        if (requestParameters['stravaCallbackInput'] == null) {
+        if (requestParameters['stravaCallbackDto'] == null) {
             throw new runtime.RequiredError(
-                'stravaCallbackInput',
-                'Required parameter "stravaCallbackInput" was null or undefined when calling integrationsControllerHandleStravaCallback().'
+                'stravaCallbackDto',
+                'Required parameter "stravaCallbackDto" was null or undefined when calling integrationsControllerHandleStravaCallback().'
             );
         }
 
@@ -268,7 +268,7 @@ export class IntegrationsApi extends runtime.BaseAPI {
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: StravaCallbackInputToJSON(requestParameters['stravaCallbackInput']),
+            body: StravaCallbackDtoToJSON(requestParameters['stravaCallbackDto']),
         };
     }
 

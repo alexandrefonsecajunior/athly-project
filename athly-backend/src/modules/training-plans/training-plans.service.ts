@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { Prisma, SportType } from '@prisma/client';
-import { CreateTrainingPlanInput } from './dto/create-training-plan.dto';
-import { UpdateTrainingPlanInput } from './dto/update-training-plan.dto';
+import { CreateTrainingPlanDto } from './dto/create-training-plan.dto';
+import { UpdateTrainingPlanDto } from './dto/update-training-plan.dto';
 import { TrainingPlanModel } from './models/training-plan.model';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class TrainingPlansService {
 
   async createTrainingPlan(
     userId: string,
-    input: CreateTrainingPlanInput,
+    input: CreateTrainingPlanDto,
   ): Promise<TrainingPlanModel> {
     const existing = await this.prisma.trainingPlan.findUnique({
       where: { userId },
@@ -58,7 +58,7 @@ export class TrainingPlansService {
   async updateTrainingPlan(
     userId: string,
     id: string,
-    input: UpdateTrainingPlanInput,
+    input: UpdateTrainingPlanDto,
   ): Promise<TrainingPlanModel> {
     const existing = await this.prisma.trainingPlan.findFirst({
       where: { id, userId },

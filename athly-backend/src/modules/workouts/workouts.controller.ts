@@ -1,12 +1,12 @@
 import { Controller, Get, Post, Put, Patch, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { WorkoutsService } from './workouts.service';
-import { SubmitWorkoutFeedbackInput } from './dto/submit-workout-feedback.dto';
+import { SubmitWorkoutFeedbackDto } from './dto/submit-workout-feedback.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user-rest.decorator';
 import { UserModel } from '../users/models/user.model';
-import { UpdateWorkoutInput } from './dto/workout-update.dto';
-import { CreateWorkoutInput } from './dto/create-workout.dto';
+import { UpdateWorkoutDto } from './dto/workout-update.dto';
+import { CreateWorkoutDto } from './dto/create-workout.dto';
 import { WorkoutModel, WorkoutFeedbackModel } from './models/workout.model';
 
 @ApiTags('workouts')
@@ -30,7 +30,7 @@ export class WorkoutsController {
 
   @Post()
   @ApiCreatedResponse({ type: WorkoutModel })
-  createWorkout(@CurrentUser() user: UserModel, @Body() input: CreateWorkoutInput): Promise<WorkoutModel> {
+  createWorkout(@CurrentUser() user: UserModel, @Body() input: CreateWorkoutDto): Promise<WorkoutModel> {
     return this.workoutsService.createWorkout(user.id, input);
   }
 
@@ -54,7 +54,7 @@ export class WorkoutsController {
   submitWorkoutFeedback(
     @CurrentUser() user: UserModel,
     @Param('workoutId') workoutId: string,
-    @Body() input: SubmitWorkoutFeedbackInput,
+    @Body() input: SubmitWorkoutFeedbackDto,
   ): Promise<WorkoutFeedbackModel> {
     return this.workoutsService.submitWorkoutFeedback(user.id, workoutId, input);
   }
@@ -73,7 +73,7 @@ export class WorkoutsController {
 
   @Put(':workoutId')
   @ApiOkResponse({ type: WorkoutModel })
-  updateWorkout(@Param('workoutId') workoutId: string, @Body() input: UpdateWorkoutInput): Promise<WorkoutModel> {
+  updateWorkout(@Param('workoutId') workoutId: string, @Body() input: UpdateWorkoutDto): Promise<WorkoutModel> {
     return this.workoutsService.updateWorkout(workoutId, input);
   }
 }
