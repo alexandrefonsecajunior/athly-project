@@ -33,6 +33,23 @@ struct ProfileView: View {
                     }
                     .listRowBackground(AthlyTheme.Color.surfaceDark)
 
+                    // Integração (teste HealthKit)
+                    Section("Integracao") {
+                        NavigationLink {
+                            HealthKitRunsView()
+                        } label: {
+                            HStack {
+                                Image(systemName: "heart.fill")
+                                    .foregroundStyle(AthlyTheme.Color.primary)
+                                    .frame(width: 28)
+                                Text("Corridas do Apple Health")
+                                    .font(AthlyTheme.Typography.body())
+                                    .foregroundStyle(AthlyTheme.Color.textPrimary)
+                            }
+                        }
+                        .listRowBackground(AthlyTheme.Color.surfaceDark)
+                    }
+
                     // App info
                     Section("Sobre") {
                         HStack {
