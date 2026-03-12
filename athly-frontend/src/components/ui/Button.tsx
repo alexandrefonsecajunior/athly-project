@@ -22,12 +22,12 @@ export function Button({
   const base = 'inline-flex items-center justify-center font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-background-dark)] disabled:opacity-50 disabled:cursor-not-allowed active:scale-95'
   
   const variants = {
-    primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-600)] focus:ring-[var(--color-primary-400)] rounded-xl shadow-lg hover:shadow-xl',
-    secondary: 'bg-[var(--color-surface-card)] text-[var(--color-text-primary)] hover:bg-[var(--color-surface-dark)] border border-[var(--color-border-dark)] focus:ring-[var(--color-primary-400)] rounded-xl',
-    outline: 'border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white focus:ring-[var(--color-primary-400)] rounded-xl',
-    ghost: 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-card)] hover:text-[var(--color-text-primary)] focus:ring-[var(--color-primary-400)] rounded-lg',
-    danger: 'bg-[var(--color-error)] text-white hover:bg-[var(--color-error-dark)] focus:ring-[var(--color-error)] rounded-xl shadow-lg hover:shadow-xl',
-    gradient: 'text-white hover:opacity-90 focus:ring-[var(--color-primary-neon)] rounded-xl shadow-lg hover:shadow-[var(--shadow-glow)] gradient-primary',
+    primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-600)] focus:ring-[var(--color-primary-400)] rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.97]',
+    secondary: 'glass text-[var(--color-text-primary)] hover:bg-white/[0.07] focus:ring-[var(--color-primary-400)] rounded-2xl active:scale-[0.97]',
+    outline: 'border-2 border-[var(--color-primary)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white focus:ring-[var(--color-primary-400)] rounded-2xl active:scale-[0.97]',
+    ghost: 'text-[var(--color-text-secondary)] hover:bg-white/[0.05] hover:backdrop-blur-xl hover:text-[var(--color-text-primary)] focus:ring-[var(--color-primary-400)] rounded-xl active:scale-[0.97]',
+    danger: 'bg-[var(--color-error)] text-white hover:bg-[var(--color-error-dark)] focus:ring-[var(--color-error)] rounded-2xl shadow-lg hover:shadow-xl active:scale-[0.97]',
+    gradient: 'text-white hover:opacity-90 focus:ring-[var(--color-primary-neon)] rounded-2xl shadow-lg hover:shadow-[var(--shadow-glow)] gradient-primary active:scale-[0.97]',
   }
   
   const sizes = {

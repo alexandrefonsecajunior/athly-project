@@ -20,15 +20,15 @@ export function Card({
   }
 
   const variants = {
-    default: 'bg-[var(--color-surface-card)] border border-[var(--color-border-dark)] shadow-lg backdrop-blur-sm',
-    gradient: 'gradient-card border border-[var(--color-border-dark)] shadow-xl',
-    glow: 'bg-[var(--color-surface-card)] border border-[var(--color-primary-500)] shadow-[var(--shadow-neon)]',
-    flat: 'bg-[var(--color-surface-card)] border-none',
+    default: 'glass shadow-lg',
+    gradient: 'glass-primary shadow-xl',
+    glow: 'glass-glow',
+    flat: 'glass-flat border-none',
   }
 
   return (
     <div
-      className={`rounded-2xl transition-all duration-300 hover:scale-[1.01] ${variants[variant]} ${paddings[padding]} ${className}`}
+      className={`rounded-3xl transition-all duration-300 hover:scale-[1.01] ${variants[variant]} ${paddings[padding]} ${className}`}
       {...props}
     >
       {children}

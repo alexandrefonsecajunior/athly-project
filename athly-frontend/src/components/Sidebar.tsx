@@ -16,9 +16,9 @@ export function Sidebar() {
   const user = useAuthStore((s) => s.user);
 
   return (
-    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col border-r border-[var(--color-border-dark)] bg-[var(--color-surface-card)] backdrop-blur-sm md:flex">
+    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-64 flex-col border-r border-white/[0.07] glass md:flex">
       {/* Logo Header */}
-      <div className="relative flex h-16 items-center gap-3 border-b border-[var(--color-border-dark)] px-6 overflow-hidden">
+      <div className="relative flex h-16 items-center gap-3 border-b border-white/[0.07] px-6 overflow-hidden">
         <div className="absolute inset-0 gradient-primary opacity-5" />
         <img
           src="/src/assets/icons/main.png"
@@ -43,7 +43,7 @@ export function Sidebar() {
               `group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-300 ${
                 isActive
                   ? "gradient-primary text-white shadow-[var(--shadow-neon)] scale-[1.02]"
-                  : "text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-dark)] hover:text-[var(--color-text-primary)] hover:scale-[1.02]"
+                  : "text-[var(--color-text-secondary)] hover:bg-white/[0.06] hover:text-[var(--color-text-primary)] hover:scale-[1.02]"
               }`
             }
           >
@@ -66,7 +66,7 @@ export function Sidebar() {
 
       {/* User Info */}
       {user && (
-        <div className="relative border-t border-[var(--color-border-dark)] p-4 overflow-hidden">
+        <div className="relative border-t border-white/[0.07] p-4 overflow-hidden">
           <div className="absolute inset-0 gradient-card opacity-50" />
           <div className="relative flex items-center gap-3">
             <div className="h-10 w-10 rounded-full gradient-primary flex items-center justify-center text-lg font-bold text-white glow-primary">
