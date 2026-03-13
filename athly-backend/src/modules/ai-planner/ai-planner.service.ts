@@ -7,6 +7,7 @@ import { PrismaService } from '../../database/prisma.service';
 import { StravaService } from './strava.service';
 import { GeminiService } from './gemini.service';
 import { PlanNextWeekDto } from './dto/plan-next-week.dto';
+import { PlanFromHealthDto } from './dto/plan-from-health.dto';
 import type { AiPlannerInput, PlannerResults, RunSummary } from './types/planner.types';
 
 @Injectable()
@@ -116,6 +117,141 @@ export class AiPlannerService {
       analysis: plannerResult.analysis,
       isAssessment,
     };
+  }
+
+  async planFromHealth(userId: string, input: PlanFromHealthDto) {
+    const startMonday = input.weekStartDate ? new Date(input.weekStartDate) : this.getNextMonday();
+    const weekDates = this.getWeekDates(startMonday);
+    const weekStartDate = new Date(weekDates[0]!);
+    const weekEndDate = new Date(weekDates[6]!);
+
+    const trainingPlan = await this.resolveTrainingPlan(userId, weekDates[0]!);
+    await this.checkWeekOverlap(trainingPlan.id, weekStartDate, weekEndDate);
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { availability: true },
+    });
+    const trainingDays = user?.availability ?? 5;
+
+    const aiInput = this.buildAiInputFromHealthRuns(input.runs, weekDates, trainingDays);
+    const plannerResult = await this.geminiService.generatePlan(aiInput);
+
+    const { weeklyGoal, workouts } = await this.prisma.$transaction(async (tx) => {
+      const weeklyGoal = await tx.weeklyGoal.create({
+        data: {
+          trainingPlanId: trainingPlan.id,
+          weekStartDate,
+          weekEndDate,
+          status: WeeklyGoalStatus.GENERATED,
+          metrics: plannerResult.analysis as unknown as Prisma.InputJsonValue,
+        },
+      });
+
+      const workouts = await Promise.all(
+        plannerResult.weekPlan.map((day) =>
+          tx.workout.create({
+            data: {
+              trainingPlanId: trainingPlan.id,
+              weeklyGoalId: weeklyGoal.id,
+              userId,
+              dateScheduled: new Date(day.date),
+              sportType: day.sportType as SportType,
+              title: day.title,
+              description: day.description,
+              blocks: day.blocks as unknown as Prisma.InputJsonValue,
+              status: WorkoutStatus.scheduled,
+              intensity: day.intensity,
+            },
+          }),
+        ),
+      );
+
+      return { weeklyGoal, workouts };
+    });
+
+    return {
+      trainingPlan: { id: trainingPlan.id, status: trainingPlan.status as any },
+      weeklyGoal: {
+        id: weeklyGoal.id,
+        trainingPlanId: weeklyGoal.trainingPlanId,
+        weekStartDate: weeklyGoal.weekStartDate,
+        weekEndDate: weeklyGoal.weekEndDate,
+        status: weeklyGoal.status as any,
+        metrics: weeklyGoal.metrics as any,
+        createdAt: weeklyGoal.createdAt,
+        updatedAt: weeklyGoal.updatedAt,
+      },
+      workouts: workouts.map((w) => ({
+        id: w.id,
+        date: w.dateScheduled.toISOString().split('T')[0],
+        sportType: w.sportType as any,
+        title: w.title,
+        description: w.description ?? undefined,
+        blocks: w.blocks as any,
+        status: w.status as any,
+        intensity: w.intensity ?? undefined,
+        stravaActivityId: w.stravaActivityId ?? null,
+      })),
+      analysis: plannerResult.analysis,
+      isAssessment: false,
+    };
+  }
+
+  private buildAiInputFromHealthRuns(
+    runs: PlanFromHealthDto['runs'],
+    weekDates: string[],
+    trainingDays: number,
+  ): AiPlannerInput {
+    const totalDistM = runs.reduce((sum, r) => sum + r.distanceMeters, 0);
+    const totalDistKm = totalDistM / 1000;
+    const avgDistKm = totalDistKm / runs.length;
+    const maxDistKm = Math.max(...runs.map((r) => r.distanceMeters / 1000));
+
+    const runSummaries: RunSummary[] = runs.map((r, i) => {
+      const distanceKm = parseFloat((r.distanceMeters / 1000).toFixed(2));
+      const durationMin = Math.round(r.durationSeconds / 60);
+      const paceStr =
+        r.averagePaceSecondsPerKm != null && r.averagePaceSecondsPerKm > 0
+          ? this.formatPaceFromSecondsPerKm(r.averagePaceSecondsPerKm)
+          : 'N/A';
+      return {
+        index: i + 1,
+        name: `Corrida ${i + 1}`,
+        date: new Date(r.startDate).toLocaleDateString(),
+        distanceKm,
+        durationMin,
+        avgPace: paceStr,
+        avgHR: null,
+        elevationGain: r.elevationGainMeters ?? null,
+      };
+    });
+
+    const paceSum = runs.filter((r) => r.averagePaceSecondsPerKm != null && r.averagePaceSecondsPerKm > 0);
+    const avgPaceSecondsPerKm =
+      paceSum.length > 0
+        ? paceSum.reduce((s, r) => s + (r.averagePaceSecondsPerKm ?? 0), 0) / paceSum.length
+        : 0;
+    const avgPace =
+      avgPaceSecondsPerKm > 0 ? this.formatPaceFromSecondsPerKm(avgPaceSecondsPerKm) : 'N/A';
+
+    return {
+      runSummaries,
+      avgDistKm,
+      avgPace,
+      avgHR: null,
+      maxDistKm,
+      totalDistKm,
+      weekDates,
+      trainingDays,
+    };
+  }
+
+  private formatPaceFromSecondsPerKm(paceSecondsPerKm: number): string {
+    if (!paceSecondsPerKm || paceSecondsPerKm <= 0) return 'N/A';
+    const minutes = Math.floor(paceSecondsPerKm / 60);
+    const seconds = Math.round(paceSecondsPerKm % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
 
   private async resolveTrainingPlan(userId: string, weekStartDate: string) {

@@ -12,6 +12,7 @@ final class TrainingPlanViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var isGenerating: Bool = false
     @Published var errorMessage: String?
+    @Published var lastAnalysis: RunAnalysis?
 
     // MARK: - Computed Properties
 
@@ -37,6 +38,16 @@ final class TrainingPlanViewModel: ObservableObject {
         currentWeekWorkouts.first { $0.status == .scheduled }
     }
 
+    /// Próximos 5 treinos (a partir de hoje), ordenados por data; usado na tela Plano.
+    var nextFiveWorkouts: [WorkoutModel] {
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        return allWorkouts
+            .filter { $0.parsedDate >= startOfToday }
+            .sorted { $0.parsedDate < $1.parsedDate }
+            .prefix(5)
+            .map { $0 }
+    }
+
     // MARK: - Load Data
 
     func loadData() async {
@@ -44,7 +55,16 @@ final class TrainingPlanViewModel: ObservableObject {
         errorMessage = nil
 
         do {
-            let plan = try await APIClient.shared.getMyTrainingPlan()
+            guard let plan = try await APIClient.shared.getMyTrainingPlan() else {
+                // Backend retorna 200 com body null quando não há plano
+                trainingPlanResponse = nil
+                weeks = []
+                allWorkouts = []
+                weeklyGoals = []
+                todayWorkout = nil
+                isLoading = false
+                return
+            }
             trainingPlanResponse = plan
 
             async let goalsTask = APIClient.shared.getWeeklyGoals(trainingPlanId: plan.id)
@@ -62,7 +82,6 @@ final class TrainingPlanViewModel: ObservableObject {
             // Select current week by default
             selectedWeekIndex = currentWeekIndex()
         } catch APIError.notFound {
-            // User has no training plan yet
             trainingPlanResponse = nil
             weeks = []
             allWorkouts = []
@@ -83,8 +102,28 @@ final class TrainingPlanViewModel: ObservableObject {
 
         do {
             let request = PlanNextWeekRequest(numberOfRuns: nil, weekStartDate: nil)
-            _ = try await APIClient.shared.planNextWeek(request)
+            let response = try await APIClient.shared.planNextWeek(request)
+            lastAnalysis = response.analysis
             await loadData()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+
+        isGenerating = false
+    }
+
+    func generateFromHealth(runs: [HealthKitRunItem]) async {
+        guard !runs.isEmpty else { return }
+        isGenerating = true
+        errorMessage = nil
+
+        do {
+            let payloads = runs.map { HealthRunPayload(from: $0) }
+            let request = PlanFromHealthRequest(runs: payloads, weekStartDate: nil)
+            let response = try await APIClient.shared.planFromHealth(request)
+            lastAnalysis = response.analysis
+            await loadData()
+            selectedWeekIndex = max(0, weeks.count - 1)
         } catch {
             errorMessage = error.localizedDescription
         }

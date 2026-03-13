@@ -69,8 +69,41 @@ struct WorkoutBlock: Codable, Sendable {
     let type: String
     let duration: Double?
     let distance: Double?
-    let targetPace: Double?
+    /// Backend envia no formato "M:SS" (ex.: "5:12"), não número.
+    let targetPace: String?
     let instructions: String?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case duration
+        case distance
+        case durationMinutes
+        case distanceKm
+        case targetPace
+        case instructions
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        type = (try c.decodeIfPresent(String.self, forKey: .type)) ?? "rest"
+        var d: Double? = try c.decodeIfPresent(Double.self, forKey: .duration)
+        if d == nil { d = try c.decodeIfPresent(Double.self, forKey: .durationMinutes) }
+        duration = d
+        var dist: Double? = try c.decodeIfPresent(Double.self, forKey: .distance)
+        if dist == nil { dist = try c.decodeIfPresent(Double.self, forKey: .distanceKm) }
+        distance = dist
+        targetPace = try c.decodeIfPresent(String.self, forKey: .targetPace)
+        instructions = try c.decodeIfPresent(String.self, forKey: .instructions)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        try c.encode(type, forKey: .type)
+        try c.encodeIfPresent(duration, forKey: .duration)
+        try c.encodeIfPresent(distance, forKey: .distance)
+        try c.encodeIfPresent(targetPace, forKey: .targetPace)
+        try c.encodeIfPresent(instructions, forKey: .instructions)
+    }
 }
 
 // MARK: - Workout Model
@@ -85,7 +118,8 @@ struct WorkoutModel: Codable, Identifiable, Sendable {
     let status: WorkoutStatus
     let trainingPlanId: String?
     let weeklyGoalId: String?
-    let intensity: Int?
+    /// Backend envia número (pode ser decimal); aceitamos Double para evitar falha de decode.
+    let intensity: Double?
     let stravaActivityId: String?
 
     var parsedDate: Date {
@@ -143,6 +177,20 @@ struct WeeklyGoalResponse: Codable, Identifiable, Sendable {
     }
 }
 
+// MARK: - Run Analysis (AI summary)
+
+struct RunAnalysis: Codable, Sendable {
+    let runsAnalyzed: Int
+    let period: String
+    let avgDistanceKm: Double
+    let avgPace: String
+    /// Backend pode enviar número inteiro ou decimal; aceitamos Double para evitar falha de decode.
+    let avgHeartRate: Double?
+    let totalDistanceKm: Double
+    let trend: String
+    let fitnessInsights: String
+}
+
 // MARK: - Plan Next Week
 
 struct PlanNextWeekRequest: Encodable, Sendable {
@@ -153,6 +201,40 @@ struct PlanNextWeekRequest: Encodable, Sendable {
 struct PlanNextWeekResponse: Decodable, Sendable {
     let weeklyGoal: WeeklyGoalResponse
     let workouts: [WorkoutModel]
+    let analysis: RunAnalysis?
+}
+
+// MARK: - Plan From Health
+
+struct HealthRunPayload: Encodable, Sendable {
+    let startDate: String
+    let distanceMeters: Double
+    let durationSeconds: Double
+    let averagePaceSecondsPerKm: Double
+    let activeEnergyBurned: Double
+    let elevationGainMeters: Double?
+
+    init(from item: HealthKitRunItem) {
+        let iso = ISO8601DateFormatter()
+        iso.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        self.startDate = iso.string(from: item.startDate)
+        self.distanceMeters = item.distanceMeters
+        self.durationSeconds = item.durationSeconds
+        self.averagePaceSecondsPerKm = item.averagePaceSecondsPerKm
+        self.activeEnergyBurned = item.activeEnergyBurned
+        self.elevationGainMeters = item.elevationGainMeters
+    }
+}
+
+struct PlanFromHealthRequest: Encodable, Sendable {
+    let runs: [HealthRunPayload]
+    let weekStartDate: String?
+}
+
+struct AiPlannerResponse: Decodable, Sendable {
+    let weeklyGoal: WeeklyGoalResponse
+    let workouts: [WorkoutModel]
+    let analysis: RunAnalysis
 }
 
 // MARK: - Week (assembled on client)

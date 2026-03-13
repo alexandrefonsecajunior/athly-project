@@ -60,8 +60,16 @@ struct PlanView: View {
                     // Plan header
                     planHeaderCard(plan)
 
-                    // Generate button
+                    if let analysis = planVM.lastAnalysis {
+                        AnalysisSummaryCard(analysis: analysis)
+                    }
+
+                    // Generate buttons
                     generateButton
+                    generateFromHealthButton
+
+                    // Próximos 5 treinos (inclui treinos da próxima semana)
+                    nextFiveWorkoutsSection
 
                     if planVM.weeks.isEmpty {
                         emptyPlanState
@@ -120,6 +128,108 @@ struct PlanView: View {
         }
         .buttonStyle(AthlyGradientButtonStyle())
         .disabled(planVM.isGenerating)
+    }
+
+    private var generateFromHealthButton: some View {
+        Button {
+            Task { await fetchHealthRunsAndGenerate() }
+        } label: {
+            HStack {
+                Image(systemName: "heart.fill")
+                Text("Planejar com Apple Health")
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(AthlyTheme.Color.primary.opacity(0.15))
+            .foregroundStyle(AthlyTheme.Color.primary)
+            .clipShape(RoundedRectangle(cornerRadius: AthlyTheme.Radius.button, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: AthlyTheme.Radius.button, style: .continuous)
+                    .stroke(AthlyTheme.Color.primary.opacity(0.4), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .disabled(planVM.isGenerating)
+    }
+
+    private func fetchHealthRunsAndGenerate() async {
+        let service: any HealthKitRunningWorkoutsProviding = {
+            #if targetEnvironment(simulator)
+            return MockHealthKitService()
+            #else
+            return HealthKitService()
+            #endif
+        }()
+        guard service.isHealthDataAvailable else {
+            planVM.errorMessage = "O Apple Health não está disponível neste dispositivo."
+            return
+        }
+        do {
+            try await service.requestAuthorization()
+            let runs = try await service.fetchLatestRunningWorkouts(limit: 20)
+            guard !runs.isEmpty else {
+                planVM.errorMessage = "Nenhuma corrida encontrada no Apple Health."
+                return
+            }
+            await planVM.generateFromHealth(runs: runs)
+        } catch {
+            planVM.errorMessage = error.localizedDescription
+        }
+    }
+
+    private var nextFiveWorkoutsSection: some View {
+        let nextFive = planVM.nextFiveWorkouts
+        let nextId = planVM.nextWorkout?.id
+        return VStack(alignment: .leading, spacing: 12) {
+            Text("Próximos 5 treinos")
+                .font(AthlyTheme.Typography.semibold(17))
+                .foregroundStyle(AthlyTheme.Color.textPrimary)
+                .padding(.horizontal, AthlyTheme.Spacing.sm)
+
+            if nextFive.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.system(size: 32))
+                        .foregroundStyle(AthlyTheme.Color.textTertiary)
+                    Text("Nenhum treino programado nos próximos dias")
+                        .font(AthlyTheme.Typography.body(15))
+                        .foregroundStyle(AthlyTheme.Color.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(20)
+                .athlyCard()
+                .padding(.horizontal, AthlyTheme.Spacing.sm)
+            } else {
+                ForEach(nextFive) { workout in
+                    NavigationLink {
+                        WorkoutDetailView(workout: workout)
+                    } label: {
+                        WorkoutCardView(
+                            workout: workout,
+                            compact: true,
+                            isNext: workout.id == nextId
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .contextMenu {
+                        if workout.status == .scheduled {
+                            Button {
+                                Task { await planVM.completeWorkout(workout) }
+                            } label: {
+                                Label("Marcar como concluído", systemImage: "checkmark.circle")
+                            }
+                            Button {
+                                Task { await planVM.skipWorkout(workout) }
+                            } label: {
+                                Label("Pular treino", systemImage: "forward.fill")
+                            }
+                        }
+                    }
+                }
+                .padding(.horizontal, AthlyTheme.Spacing.sm)
+            }
+        }
     }
 
     private var weekSelector: some View {
@@ -243,17 +353,19 @@ struct PlanView: View {
     }
 
     private var noPlanState: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 20) {
             Image(systemName: "sparkles")
                 .font(.system(size: 48))
                 .foregroundStyle(AthlyTheme.Color.textTertiary)
             Text("Sem plano de treino")
                 .font(AthlyTheme.Typography.semibold(17))
                 .foregroundStyle(AthlyTheme.Color.textPrimary)
-            Text("Crie um plano de treino no aplicativo web para começar.")
+            Text("Use seus dados do Apple Health para criar seu primeiro plano, ou crie um no aplicativo web.")
                 .font(AthlyTheme.Typography.body(15))
                 .foregroundStyle(AthlyTheme.Color.textSecondary)
                 .multilineTextAlignment(.center)
+            generateFromHealthButton
+                .padding(.top, 8)
         }
         .padding(40)
         .frame(maxWidth: .infinity)

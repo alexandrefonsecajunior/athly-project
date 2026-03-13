@@ -61,7 +61,8 @@ actor APIClient {
 
     // MARK: - Training Plan Endpoints
 
-    func getMyTrainingPlan() async throws -> TrainingPlanResponse {
+    /// Backend retorna 200 com body `null` quando o usuário não tem plano; por isso retornamos opcional.
+    func getMyTrainingPlan() async throws -> TrainingPlanResponse? {
         try await get("/training-plans/me")
     }
 
@@ -69,12 +70,25 @@ actor APIClient {
         try await get("/weekly-goals/training-plan/\(trainingPlanId)")
     }
 
+    /// Backend pode retornar 200 com body `null` ou corpo vazio quando não há treino hoje.
     func getTodayWorkout() async throws -> WorkoutModel? {
-        do {
-            let workout: WorkoutModel = try await get("/workouts/today")
-            return workout
-        } catch APIError.notFound {
+        let request = try buildRequest(path: "/workouts/today", method: "GET", authenticated: true)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else { throw APIError.invalidResponse }
+        switch httpResponse.statusCode {
+        case 200...299:
+            if data.isEmpty { return nil }
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode(WorkoutModel?.self, from: data)
+        case 404:
             return nil
+        case 401:
+            throw APIError.unauthorized
+        default:
+            let message = String(data: data, encoding: .utf8) ?? "Unknown error"
+            throw APIError.serverError(httpResponse.statusCode, message)
         }
     }
 
@@ -92,6 +106,10 @@ actor APIClient {
 
     func planNextWeek(_ request: PlanNextWeekRequest) async throws -> PlanNextWeekResponse {
         try await post("/ai-planner/plan-next-week", body: request)
+    }
+
+    func planFromHealth(_ request: PlanFromHealthRequest) async throws -> AiPlannerResponse {
+        try await post("/ai-planner/plan-from-health", body: request)
     }
 
     // MARK: - HTTP
@@ -142,8 +160,25 @@ actor APIClient {
         switch httpResponse.statusCode {
         case 200...299:
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .iso8601
-            return try decoder.decode(T.self, from: data)
+            do {
+                return try decoder.decode(T.self, from: data)
+            } catch {
+                let raw = String(data: data, encoding: .utf8) ?? ""
+                print("[APIClient] Decode failed for \(T.self): \(error)")
+                if let de = error as? DecodingError {
+                    switch de {
+                    case .keyNotFound(let key, let ctx): print("[APIClient] keyNotFound: \(key.stringValue) – \(ctx.debugDescription)")
+                    case .typeMismatch(let type, let ctx): print("[APIClient] typeMismatch: \(type) – \(ctx.debugDescription)")
+                    case .valueNotFound(let type, let ctx): print("[APIClient] valueNotFound: \(type) – \(ctx.debugDescription)")
+                    case .dataCorrupted(let ctx): print("[APIClient] dataCorrupted – \(ctx.debugDescription)")
+                    @unknown default: break
+                    }
+                }
+                print("[APIClient] Response snippet: \(raw.prefix(800))...")
+                throw error
+            }
         case 401:
             throw APIError.unauthorized
         case 404:

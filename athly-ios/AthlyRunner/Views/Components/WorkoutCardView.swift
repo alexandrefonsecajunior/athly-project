@@ -69,8 +69,8 @@ struct WorkoutCardView: View {
         .athlyCard(glow: isNext)
     }
 
-    private func intensityColor(_ value: Int) -> Color {
-        switch value {
+    private func intensityColor(_ value: Double) -> Color {
+        switch Int(value) {
         case 1...3: return AthlyTheme.Color.success
         case 4...6: return AthlyTheme.Color.warning
         default: return AthlyTheme.Color.error
