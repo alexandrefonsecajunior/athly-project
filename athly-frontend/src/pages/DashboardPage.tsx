@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Moon, Flame, Rocket, Sparkles, Check, Trophy, CalendarDays, BarChart3 } from 'lucide-react'
 import { Card, GradientText, StatCard, ProgressBar, Badge, Divider } from '@/components/ui'
 import { Button } from '@/components/ui/Button'
 import { WorkoutCard } from '@/components/WorkoutCard'
@@ -57,7 +58,9 @@ export function DashboardPage() {
               Olá, {user?.name?.split(' ')[0] ?? 'atleta'}!
             </h1>
           </GradientText>
-          <span className="text-2xl animate-pulse-glow">👋</span>
+          <span className="text-2xl animate-pulse-glow">
+            <Sparkles className="h-7 w-7 text-[var(--color-primary-neon)]" />
+          </span>
         </div>
         <p className="mt-2 text-lg text-[var(--color-text-secondary)]">
           Pronto para treinar hoje?
@@ -72,13 +75,13 @@ export function DashboardPage() {
           <div className="absolute top-0 right-0 w-64 h-64 gradient-primary opacity-10 blur-3xl rounded-full" />
           <div className="relative">
             <div className="flex items-center justify-between mb-4">
-              <Badge variant="neon" size="lg">✨ Treino de Hoje</Badge>
-              <span className="text-4xl">🔥</span>
+              <Badge variant="neon" size="lg"><Sparkles className="h-4 w-4 inline mr-1" />Treino de Hoje</Badge>
+              <Flame className="h-9 w-9 text-orange-400" />
             </div>
             <WorkoutCard workout={todayWorkout} />
             <Link to={`/workout/${todayWorkout.id}`} className="mt-6 block">
               <Button variant="gradient" fullWidth size="lg" glow>
-                🚀 Iniciar treino agora
+                <Rocket className="h-5 w-5 inline mr-2" />Iniciar treino agora
               </Button>
             </Link>
           </div>
@@ -86,7 +89,7 @@ export function DashboardPage() {
       ) : (
         <Card variant="gradient" padding="lg">
           <div className="text-center py-8">
-            <span className="text-6xl mb-4 block">😴</span>
+            <Moon className="h-16 w-16 mx-auto mb-4 text-[var(--color-text-tertiary)]" />
             <h2 className="text-2xl font-bold text-gradient mb-2">
               Dia de descanso
             </h2>
@@ -102,10 +105,10 @@ export function DashboardPage() {
       {/* Progress */}
       <Section title="Progresso Semanal" spacing="md">
         <Card padding="lg">
-          <ProgressBar 
-            value={progress} 
+          <ProgressBar
+            value={progress}
             variant="gradient"
-            showValue 
+            showValue
             glow
             size="lg"
           />
@@ -125,28 +128,28 @@ export function DashboardPage() {
         <StatCard
           label="Esta Semana"
           value={completedCount}
-          icon="✓"
+          icon={<Check className="h-5 w-5" />}
           variant="default"
           gradient
         />
         <StatCard
           label="Sequência"
           value="7 dias"
-          icon="🔥"
+          icon={<Flame className="h-5 w-5" />}
           badge={{ text: 'Recorde!', variant: 'success' }}
         />
         <StatCard
           label="Total"
           value={`${totalCount * 4}`}
-          icon="🏆"
+          icon={<Trophy className="h-5 w-5" />}
           trend={{ value: 15, label: 'vs. mês passado' }}
         />
       </div>
 
       {/* Next Workout */}
       {nextWorkout && (
-        <Section 
-          title="Próximo Treino" 
+        <Section
+          title="Próximo Treino"
           subtitle="Prepare-se para o que vem"
           spacing="md"
         >
@@ -160,12 +163,12 @@ export function DashboardPage() {
       <div className="flex flex-col sm:flex-row gap-4">
         <Link to="/plan" className="flex-1">
           <Button variant="outline" fullWidth size="lg">
-            📅 Ver plano completo
+            <CalendarDays className="h-5 w-5 inline mr-2" />Ver plano completo
           </Button>
         </Link>
         <Link to="/history" className="flex-1">
           <Button variant="ghost" fullWidth size="lg">
-            📊 Histórico
+            <BarChart3 className="h-5 w-5 inline mr-2" />Histórico
           </Button>
         </Link>
       </div>

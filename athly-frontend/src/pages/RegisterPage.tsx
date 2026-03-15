@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Sparkles } from "lucide-react";
 import { Button, Card, GradientText, Badge, Divider } from "@/components/ui";
 import { Input } from "@/components/ui/Input";
 import { useAuthStore } from "@/store/authStore";
@@ -152,7 +153,7 @@ export function RegisterPage() {
             Crie sua conta e comece a treinar
           </p>
           <Badge variant="neon" className="mt-4">
-            ✨ Powered by AI
+            <Sparkles className="h-3.5 w-3.5 inline mr-1" />Powered by AI
           </Badge>
         </div>
 

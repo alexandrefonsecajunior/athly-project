@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { BarChart3, Inbox, Rocket, Check, Zap, Activity, Sparkles } from 'lucide-react'
 import { Card, GradientText, StatCard, Badge, Divider } from '@/components/ui'
 import { Button } from '@/components/ui/Button'
 import { WorkoutCard } from '@/components/WorkoutCard'
@@ -47,7 +48,7 @@ export function HistoryPage() {
             </p>
           </div>
           <Badge variant="neon" size="lg">
-            📊 {workouts.length} treinos
+            <BarChart3 className="h-4 w-4 inline mr-1" />{workouts.length} treinos
           </Badge>
         </div>
       </Section>
@@ -55,7 +56,7 @@ export function HistoryPage() {
       {workouts.length === 0 ? (
         <Card variant="gradient" padding="lg">
           <div className="text-center py-12">
-            <span className="text-6xl mb-4 block">📭</span>
+            <Inbox className="h-16 w-16 mx-auto mb-4 text-[var(--color-text-tertiary)]" />
             <h2 className="text-2xl font-bold text-gradient mb-3">
               Nenhum treino realizado
             </h2>
@@ -64,7 +65,7 @@ export function HistoryPage() {
             </p>
             <Link to="/plan">
               <Button variant="gradient" size="lg" glow>
-                🚀 Ver plano de treinos
+                <Rocket className="h-5 w-5 inline mr-2" />Ver plano de treinos
               </Button>
             </Link>
           </div>
@@ -76,20 +77,20 @@ export function HistoryPage() {
             <StatCard
               label="Completos"
               value={completedWorkouts.length}
-              icon="✓"
+              icon={<Check className="h-5 w-5" />}
               gradient
               variant="glow"
             />
             <StatCard
               label="Parciais"
               value={partialWorkouts.length}
-              icon="⚡"
+              icon={<Zap className="h-5 w-5" />}
               badge={partialWorkouts.length > 0 ? { text: 'Continue!', variant: 'warning' } : undefined}
             />
             <StatCard
               label="Distância"
               value={`${totalDistance.toFixed(1)} km`}
-              icon="🏃"
+              icon={<Activity className="h-5 w-5" />}
               trend={{ value: 12, label: 'vs. mês passado' }}
             />
           </div>
@@ -97,7 +98,7 @@ export function HistoryPage() {
           <Divider variant="gradient" />
 
           {/* Timeline */}
-          <Section 
+          <Section
             title="Timeline de Treinos"
             subtitle="Ordenados do mais recente"
             spacing="md"
@@ -107,7 +108,7 @@ export function HistoryPage() {
                 <div key={workout.id} className="relative">
                   {index === 0 && (
                     <Badge variant="success" size="sm" className="absolute -top-2 left-4 z-10">
-                      🆕 Mais recente
+                      <Sparkles className="h-3 w-3 inline mr-1" />Mais recente
                     </Badge>
                   )}
                   <WorkoutCard workout={workout} compact />
@@ -120,7 +121,7 @@ export function HistoryPage() {
           <Card variant="gradient" padding="lg">
             <div className="text-center">
               <h3 className="text-xl font-bold text-gradient mb-2">
-                Continue assim! 🎉
+                Continue assim!
               </h3>
               <p className="text-[var(--color-text-secondary)]">
                 Você já completou {completedWorkouts.length} treinos. Parabéns pela dedicação!

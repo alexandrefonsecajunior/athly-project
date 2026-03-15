@@ -103,7 +103,8 @@ struct PlanView: View {
                     .foregroundStyle(AthlyTheme.Color.textSecondary)
                 Spacer()
                 ForEach(plan.sports.prefix(3), id: \.rawValue) { sport in
-                    Text(sport.emoji)
+                    Image(systemName: sport.sfSymbol)
+                        .foregroundStyle(AthlyTheme.Color.primary)
                 }
             }
         }
@@ -269,15 +270,15 @@ struct PlanView: View {
 
     private var weekStatsCard: some View {
         HStack(spacing: 0) {
-            statCell(value: "\(planVM.completedThisWeek)/\(planVM.totalThisWeek)", label: "Concluídos", emoji: "✅")
+            statCell(value: "\(planVM.completedThisWeek)/\(planVM.totalThisWeek)", label: "Concluídos", sfSymbol: "checkmark.circle.fill")
             Divider().background(AthlyTheme.Color.borderDark)
-            statCell(value: "\(Int(planVM.weeklyProgress * 100))%", label: "Progresso", emoji: "📈")
+            statCell(value: "\(Int(planVM.weeklyProgress * 100))%", label: "Progresso", sfSymbol: "chart.line.uptrend.xyaxis")
 
             if let goal = planVM.weeks[safe: planVM.selectedWeekIndex]?.weeklyGoal,
                let metrics = goal.metrics,
                let title = metrics.title {
                 Divider().background(AthlyTheme.Color.borderDark)
-                statCell(value: "", label: title, emoji: "🎯")
+                statCell(value: "", label: title, sfSymbol: "target")
             }
         }
         .frame(maxWidth: .infinity)
@@ -286,10 +287,11 @@ struct PlanView: View {
         .padding(.horizontal, AthlyTheme.Spacing.sm)
     }
 
-    private func statCell(value: String, label: String, emoji: String) -> some View {
+    private func statCell(value: String, label: String, sfSymbol: String) -> some View {
         VStack(spacing: 4) {
-            Text(emoji)
+            Image(systemName: sfSymbol)
                 .font(.title2)
+                .foregroundStyle(AthlyTheme.Color.primary)
             if !value.isEmpty {
                 Text(value)
                     .font(AthlyTheme.Typography.semibold(17))

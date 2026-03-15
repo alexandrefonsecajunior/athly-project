@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { CalendarDays, Zap, Target, Activity, Sparkles, Check } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { SportBadge } from '@/components/SportBadge'
 import { Badge } from '@/components/ui/Badge'
@@ -19,7 +20,7 @@ export function WorkoutCard({ workout, compact }: WorkoutCardProps) {
   const getStatusBadge = () => {
     switch (workout.status) {
       case 'done':
-        return <Badge variant="success" size="sm">✓ Concluído</Badge>
+        return <Badge variant="success" size="sm"><Check className="h-3 w-3 inline mr-1" />Concluído</Badge>
       case 'scheduled':
         return <Badge variant="primary" size="sm">Em andamento</Badge>
       case 'partial':
@@ -38,14 +39,14 @@ export function WorkoutCard({ workout, compact }: WorkoutCardProps) {
           className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold"
           style={{ backgroundColor: '#FC4C02', color: '#fff' }}
         >
-          🏃 Strava
+          <Activity className="h-3 w-3" /> Strava
         </span>
       )
     }
     if (workout.status === 'scheduled' || workout.weeklyGoalId) {
       return (
         <Badge variant="primary" size="sm">
-          ✨ IA
+          <Sparkles className="h-3 w-3 inline mr-1" />IA
         </Badge>
       )
     }
@@ -72,16 +73,16 @@ export function WorkoutCard({ workout, compact }: WorkoutCardProps) {
             )}
             <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-[var(--color-text-tertiary)]">
               <span className="flex items-center gap-1">
-                📅 {date}
+                <CalendarDays className="h-3.5 w-3.5" /> {date}
               </span>
               {workout.intensity && (
                 <span className="flex items-center gap-1">
-                  ⚡ Intensidade {workout.intensity}/10
+                  <Zap className="h-3.5 w-3.5" /> Intensidade {workout.intensity}/10
                 </span>
               )}
               {workout.blocks?.length > 0 && (
                 <span className="flex items-center gap-1">
-                  🎯 {workout.blocks.length} blocos
+                  <Target className="h-3.5 w-3.5" /> {workout.blocks.length} blocos
                 </span>
               )}
             </div>

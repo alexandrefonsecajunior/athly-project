@@ -4,23 +4,23 @@ import SwiftUI
 
 enum AthlyTheme {
     enum Color {
-        // Brand — purple primary, cyan secondary
-        static let primary = SwiftUI.Color(hex: "#9d25f4")       // purple
-        static let primaryNeon = SwiftUI.Color(hex: "#bf40ff")   // purple neon
-        static let secondary = SwiftUI.Color(hex: "#06b6d4")     // cyan
-        static let secondaryNeon = SwiftUI.Color(hex: "#00d4ff") // cyan neon
+        // Brand — cyan primary, purple accent
+        static let primary = SwiftUI.Color(hex: "#06b6d4")       // cyan
+        static let primaryNeon = SwiftUI.Color(hex: "#00d4ff")    // cyan neon
+        static let secondary = SwiftUI.Color(hex: "#9d25f4")      // purple (accent)
+        static let secondaryNeon = SwiftUI.Color(hex: "#bf40ff")   // purple neon
         static let accent = SwiftUI.Color(hex: "#f472b6")        // pink
 
-        // Backgrounds — purple-tinted dark
-        static let backgroundDark = SwiftUI.Color(hex: "#0a0510")
-        static let surfaceDark = SwiftUI.Color(hex: "#110d1a")
-        static let surfaceCard = SwiftUI.Color(hex: "#1a1228")
+        // Backgrounds — neutral dark (remove purple tint)
+        static let backgroundDark = SwiftUI.Color(hex: "#0a0a10")
+        static let surfaceDark = SwiftUI.Color(hex: "#0d1117")
+        static let surfaceCard = SwiftUI.Color(hex: "#141820")
 
         // Borders
         static let borderDark = SwiftUI.Color.white.opacity(0.1)
 
-        // Glass
-        static let glassBackground = SwiftUI.Color(hex: "#9d25f4").opacity(0.05)
+        // Glass — cyan tint
+        static let glassBackground = SwiftUI.Color(hex: "#06b6d4").opacity(0.05)
         static let glassBorder = SwiftUI.Color.white.opacity(0.1)
 
         // Text
@@ -142,9 +142,9 @@ struct AthlyCardModifier: ViewModifier {
         content
             .background(
                 ZStack {
-                    // Solid dark purple base
+                    // Solid dark base
                     AthlyTheme.Color.surfaceCard
-                    // Purple gradient tint overlay — gives the "liquid" feel
+                    // Cyan gradient tint overlay
                     LinearGradient(
                         colors: [
                             AthlyTheme.Color.primary.opacity(0.12),

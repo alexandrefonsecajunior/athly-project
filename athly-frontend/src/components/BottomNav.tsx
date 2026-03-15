@@ -1,11 +1,13 @@
 import { NavLink } from "react-router-dom";
+import type { LucideIcon } from "lucide-react";
+import { Home, CalendarDays, Calendar, TrendingUp, User } from "lucide-react";
 
-const navItems = [
-  { to: "/dashboard", label: "Home", icon: "🏠" },
-  { to: "/plan", label: "Plano", icon: "📅" },
-  { to: "/training-plan", label: "Calendário", icon: "📆" },
-  { to: "/history", label: "Histórico", icon: "📈" },
-  { to: "/profile", label: "Perfil", icon: "👤" },
+const navItems: { to: string; label: string; icon: LucideIcon }[] = [
+  { to: "/dashboard", label: "Home", icon: Home },
+  { to: "/plan", label: "Plano", icon: CalendarDays },
+  { to: "/training-plan", label: "Calendário", icon: Calendar },
+  { to: "/history", label: "Histórico", icon: TrendingUp },
+  { to: "/profile", label: "Perfil", icon: User },
 ];
 
 export function BottomNav() {
@@ -32,23 +34,21 @@ export function BottomNav() {
                   {isActive && (
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-full gradient-primary animate-pulse-glow" />
                   )}
-                  
+
                   {/* Icon with glow effect */}
-                  <span 
-                    className={`text-2xl transition-all ${
-                      isActive 
-                        ? 'scale-110 drop-shadow-[0_0_8px_var(--color-primary-neon)]' 
+                  <item.icon
+                    className={`h-6 w-6 transition-all ${
+                      isActive
+                        ? 'scale-110 drop-shadow-[0_0_8px_var(--color-primary-neon)]'
                         : 'group-hover:scale-110'
                     }`}
-                  >
-                    {item.icon}
-                  </span>
-                  
+                  />
+
                   {/* Label */}
                   <span className={isActive ? 'text-gradient font-bold' : ''}>
                     {item.label}
                   </span>
-                  
+
                   {/* Active dot */}
                   {isActive && (
                     <div className="absolute -bottom-1 h-1 w-1 rounded-full bg-[var(--color-primary-neon)] animate-pulse" />

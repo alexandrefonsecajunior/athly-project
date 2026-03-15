@@ -43,6 +43,21 @@ enum SportType: String, Codable, CaseIterable, Sendable {
         case .other: return "🏆"
         }
     }
+
+    var sfSymbol: String {
+        switch self {
+        case .running: return "figure.run"
+        case .cycling: return "figure.outdoor.cycle"
+        case .swimming: return "figure.pool.swim"
+        case .strength: return "figure.strengthtraining.traditional"
+        case .crossfit: return "figure.cross.training"
+        case .triathlon: return "medal"
+        case .duathlon: return "figure.run"
+        case .yoga: return "figure.yoga"
+        case .walking: return "figure.walk"
+        case .other: return "trophy"
+        }
+    }
 }
 
 // MARK: - Workout Status

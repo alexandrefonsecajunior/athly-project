@@ -1,15 +1,17 @@
 import { NavLink } from "react-router-dom";
+import type { LucideIcon } from "lucide-react";
+import { BarChart3, CalendarDays, Calendar, TrendingUp, User, Settings, Check } from "lucide-react";
 import { useAuthStore } from "@/store/authStore";
 import { GradientText } from "@/components/ui/GradientText";
 import { Badge } from "@/components/ui/Badge";
 
-const navItems = [
-  { to: "/dashboard", label: "Dashboard", icon: "📊" },
-  { to: "/plan", label: "Plano", icon: "📅" },
-  { to: "/training-plan", label: "Calendário", icon: "📆" },
-  { to: "/history", label: "Histórico", icon: "📈" },
-  { to: "/profile", label: "Perfil", icon: "👤" },
-  { to: "/settings", label: "Config", icon: "⚙️" },
+const navItems: { to: string; label: string; icon: LucideIcon }[] = [
+  { to: "/dashboard", label: "Dashboard", icon: BarChart3 },
+  { to: "/plan", label: "Plano", icon: CalendarDays },
+  { to: "/training-plan", label: "Calendário", icon: Calendar },
+  { to: "/history", label: "Histórico", icon: TrendingUp },
+  { to: "/profile", label: "Perfil", icon: User },
+  { to: "/settings", label: "Config", icon: Settings },
 ];
 
 export function Sidebar() {
@@ -49,11 +51,9 @@ export function Sidebar() {
           >
             {({ isActive }) => (
               <>
-                <span
-                  className={`text-xl transition-transform ${isActive ? "scale-110" : "group-hover:scale-110"}`}
-                >
-                  {item.icon}
-                </span>
+                <item.icon
+                  className={`h-5 w-5 transition-transform ${isActive ? "scale-110" : "group-hover:scale-110"}`}
+                />
                 {item.label}
                 {isActive && (
                   <span className="ml-auto h-2 w-2 rounded-full bg-white animate-pulse" />
@@ -81,7 +81,7 @@ export function Sidebar() {
               </p>
             </div>
             <Badge variant="success" size="sm">
-              ✓
+              <Check className="h-3 w-3" />
             </Badge>
           </div>
         </div>

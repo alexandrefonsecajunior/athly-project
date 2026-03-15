@@ -142,8 +142,9 @@ struct DashboardView: View {
 
     private var restDayCard: some View {
         HStack(spacing: 12) {
-            Text("😴")
+            Image(systemName: "moon.zzz")
                 .font(.largeTitle)
+                .foregroundStyle(AthlyTheme.Color.textTertiary)
             VStack(alignment: .leading, spacing: 4) {
                 Text("Dia de descanso")
                     .font(AthlyTheme.Typography.semibold(17))
@@ -209,15 +210,15 @@ struct DashboardView: View {
 
             // Stats row
             HStack(spacing: 0) {
-                statMini(value: "\(planVM.completedThisWeek)", label: "Esta Semana", emoji: "🏋️")
+                statMini(value: "\(planVM.completedThisWeek)", label: "Esta Semana", sfSymbol: "figure.strengthtraining.traditional")
                 Rectangle()
                     .fill(AthlyTheme.Color.glassBorder)
                     .frame(width: 1, height: 40)
-                statMini(value: "-", label: "Sequência", emoji: "🔥")
+                statMini(value: "-", label: "Sequência", sfSymbol: "flame")
                 Rectangle()
                     .fill(AthlyTheme.Color.glassBorder)
                     .frame(width: 1, height: 40)
-                statMini(value: "\(planVM.allWorkouts.filter { $0.status == .done }.count)", label: "Total", emoji: "🏅")
+                statMini(value: "\(planVM.allWorkouts.filter { $0.status == .done }.count)", label: "Total", sfSymbol: "medal")
             }
 
             if let next = planVM.nextWorkout {
@@ -236,10 +237,11 @@ struct DashboardView: View {
         .athlyInsightCard()
     }
 
-    private func statMini(value: String, label: String, emoji: String) -> some View {
+    private func statMini(value: String, label: String, sfSymbol: String) -> some View {
         VStack(spacing: 2) {
-            Text(emoji)
+            Image(systemName: sfSymbol)
                 .font(.title3)
+                .foregroundStyle(AthlyTheme.Color.primary)
             Text(value)
                 .font(AthlyTheme.Typography.semibold(15))
                 .foregroundStyle(AthlyTheme.Color.textPrimary)

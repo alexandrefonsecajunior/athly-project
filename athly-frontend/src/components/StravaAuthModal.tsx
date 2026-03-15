@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
+import { Activity, Check } from 'lucide-react'
 import { Badge } from '@/components/ui'
 import { Button } from '@/components/ui/Button'
 import { initiateStravaOAuth } from '@/services/integrationService'
@@ -54,7 +55,9 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
         <div className="space-y-6">
           {/* Header */}
           <div className="text-center space-y-2">
-            <div className="text-5xl">🏃</div>
+            <div className="flex justify-center">
+              <Activity className="h-12 w-12 text-[var(--color-primary-400)]" />
+            </div>
             <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">
               Conecte seu Strava
             </h2>
@@ -72,7 +75,7 @@ export function StravaAuthModal({ onContinueWithoutStrava, onClose }: StravaAuth
               'Gera planos cada vez mais precisos',
             ].map((benefit) => (
               <div key={benefit} className="flex items-center gap-3">
-                <span className="shrink-0 text-[var(--color-primary-400)] font-bold text-lg">✓</span>
+                <Check className="h-4 w-4 shrink-0 text-[var(--color-primary-400)]" />
                 <span className="text-sm text-[var(--color-text-secondary)]">{benefit}</span>
               </div>
             ))}

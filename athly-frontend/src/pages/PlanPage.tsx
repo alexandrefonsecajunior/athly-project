@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { CalendarDays, Sparkles, Trophy, Dumbbell, Inbox, Star, Check } from "lucide-react";
 import { Card, GradientText, Badge, Divider } from "@/components/ui";
 import { Button } from "@/components/ui/Button";
 import { WorkoutCard } from "@/components/WorkoutCard";
@@ -91,7 +92,7 @@ export function PlanPage() {
             </div>
             <div className="flex items-center gap-3 flex-wrap">
               <Badge variant="neon" size="lg">
-                📅 {weeks.length} semanas
+                <CalendarDays className="h-4 w-4 inline mr-1" />{weeks.length} semanas
               </Badge>
               <Button
                 variant="gradient"
@@ -100,7 +101,7 @@ export function PlanPage() {
                 loading={generating}
                 onClick={handleGeneratePlan}
               >
-                ✨ Gerar Próxima Semana
+                <Sparkles className="h-4 w-4 inline mr-1" />Gerar Próxima Semana
               </Button>
             </div>
           </div>
@@ -148,11 +149,13 @@ export function PlanPage() {
               </p>
             </div>
             <div className="text-right">
-              <div className="text-5xl mb-2">
-                {completedCount === workouts.length && workouts.length > 0 ? "🏆" : "💪"}
+              <div className="mb-2">
+                {completedCount === workouts.length && workouts.length > 0
+                  ? <Trophy className="h-12 w-12 text-yellow-400" />
+                  : <Dumbbell className="h-12 w-12 text-[var(--color-primary-400)]" />}
               </div>
               {completedCount === workouts.length && workouts.length > 0 && (
-                <Badge variant="success" size="sm">✓ Semana completa!</Badge>
+                <Badge variant="success" size="sm"><Check className="h-3 w-3 inline mr-1" />Semana completa!</Badge>
               )}
             </div>
           </div>
@@ -170,13 +173,13 @@ export function PlanPage() {
             {workouts.length === 0 ? (
               <Card variant="default" padding="lg">
                 <div className="text-center py-8 space-y-4">
-                  <span className="text-6xl block">📭</span>
+                  <Inbox className="h-16 w-16 mx-auto text-[var(--color-text-tertiary)]" />
                   <h3 className="text-xl font-bold text-gradient">Nenhum treino programado</h3>
                   <p className="text-[var(--color-text-secondary)]">
                     Clique em "Gerar Próxima Semana" para criar seu plano personalizado
                   </p>
                   <Button variant="gradient" glow onClick={handleGeneratePlan} loading={generating}>
-                    ✨ Gerar Plano
+                    <Sparkles className="h-4 w-4 inline mr-1" />Gerar Plano
                   </Button>
                 </div>
               </Card>
@@ -185,7 +188,7 @@ export function PlanPage() {
                 <div key={workout.id} className="relative">
                   {index === 0 && workout.status === "scheduled" && (
                     <Badge variant="neon" size="sm" className="absolute -top-2 left-4 z-10">
-                      ⭐ Próximo treino
+                      <Star className="h-3 w-3 inline mr-1" />Próximo treino
                     </Badge>
                   )}
                   <WorkoutCard workout={workout} />

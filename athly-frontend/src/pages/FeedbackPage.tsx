@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
+import { BarChart3 } from 'lucide-react'
 import { Card, GradientText, Badge, Divider } from '@/components/ui'
 import { Button } from '@/components/ui/Button'
 import { Section } from '@/components/layout'
@@ -185,19 +186,19 @@ export function FeedbackPage() {
 
         {/* Submit */}
         <div className="space-y-4">
-          <Button 
-            type="submit" 
-            variant="gradient" 
-            fullWidth 
-            size="lg" 
+          <Button
+            type="submit"
+            variant="gradient"
+            fullWidth
+            size="lg"
             loading={loading}
             glow
           >
-            📊 Enviar feedback
+            <BarChart3 className="h-5 w-5 inline mr-2" />Enviar feedback
           </Button>
-          <Button 
-            type="button" 
-            variant="ghost" 
+          <Button
+            type="button"
+            variant="ghost"
             fullWidth
             onClick={() => navigate('/dashboard')}
           >

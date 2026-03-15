@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Settings, Link as LinkIcon, Zap, Activity, RefreshCw, Unplug, Lightbulb, Check } from 'lucide-react'
 import { Card, GradientText, Badge, Divider, Skeleton } from '@/components/ui'
 import { Button } from '@/components/ui/Button'
 import { Section } from '@/components/layout'
@@ -100,7 +101,7 @@ export function SettingsPage() {
             </p>
           </div>
           <Badge variant="neon" size="lg">
-            ⚙️ {connectedCount} conectados
+            <Settings className="h-4 w-4 inline mr-1" />{connectedCount} conectados
           </Badge>
         </div>
       </Section>
@@ -114,7 +115,9 @@ export function SettingsPage() {
             </h3>
             <p className="text-4xl font-bold text-gradient">{connectedCount}</p>
           </div>
-          <div className="text-5xl">{connectedCount > 0 ? '🔗' : '⚡'}</div>
+          {connectedCount > 0
+            ? <LinkIcon className="h-12 w-12 text-[var(--color-primary-400)]" />
+            : <Zap className="h-12 w-12 text-[var(--color-text-tertiary)]" />}
         </div>
       </Card>
 
@@ -129,12 +132,12 @@ export function SettingsPage() {
         >
           <div className="flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-4 flex-1 min-w-0">
-              <div className="text-4xl">🏃</div>
+              <Activity className="h-10 w-10 shrink-0 text-[#FC4C02]" />
               <div className="flex-1 min-w-0">
                 <h3 className="font-bold text-[var(--color-text-primary)] text-lg">Strava</h3>
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
                   {stravaConnected ? (
-                    <Badge variant="success" size="sm">✓ Conectado</Badge>
+                    <Badge variant="success" size="sm"><Check className="h-3 w-3 inline mr-1" />Conectado</Badge>
                   ) : (
                     <Badge variant="secondary" size="sm">Desconectado</Badge>
                   )}
@@ -160,10 +163,10 @@ export function SettingsPage() {
                     loading={syncing}
                     onClick={handleStravaSync}
                   >
-                    {syncing ? 'Sincronizando...' : '🔄 Sincronizar'}
+                    {syncing ? 'Sincronizando...' : <><RefreshCw className="h-4 w-4 inline mr-1" />Sincronizar</>}
                   </Button>
                   <Button size="md" variant="danger" onClick={handleStravaDisconnect}>
-                    🔌 Desconectar
+                    <Unplug className="h-4 w-4 inline mr-1" />Desconectar
                   </Button>
                 </>
               ) : (
@@ -174,7 +177,7 @@ export function SettingsPage() {
                   loading={connecting}
                   onClick={handleStravaConnect}
                 >
-                  🔗 Conectar Strava
+                  <LinkIcon className="h-4 w-4 inline mr-1" />Conectar Strava
                 </Button>
               )}
             </div>
@@ -216,7 +219,7 @@ export function SettingsPage() {
                         </h3>
                         <div className="flex items-center gap-2 mt-1">
                           {integration.connected ? (
-                            <Badge variant="success" size="sm">✓ Conectado</Badge>
+                            <Badge variant="success" size="sm"><Check className="h-3 w-3 inline mr-1" />Conectado</Badge>
                           ) : (
                             <Badge variant="secondary" size="sm">Desconectado</Badge>
                           )}
@@ -236,7 +239,9 @@ export function SettingsPage() {
                           : handleConnect(integration.id)
                       }
                     >
-                      {integration.connected ? '🔌 Desconectar' : '🔗 Conectar'}
+                      {integration.connected
+                        ? <><Unplug className="h-4 w-4 inline mr-1" />Desconectar</>
+                        : <><LinkIcon className="h-4 w-4 inline mr-1" />Conectar</>}
                     </Button>
                   </div>
                 </Card>
@@ -248,7 +253,7 @@ export function SettingsPage() {
       {/* Info Card */}
       <Card variant="default" padding="lg">
         <div className="flex items-start gap-4">
-          <span className="text-3xl">💡</span>
+          <Lightbulb className="h-8 w-8 shrink-0 text-yellow-400" />
           <div>
             <h3 className="font-bold text-[var(--color-text-primary)] mb-2">Por que conectar?</h3>
             <p className="text-[var(--color-text-secondary)] text-sm">

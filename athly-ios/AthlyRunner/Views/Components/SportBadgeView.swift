@@ -5,7 +5,7 @@ struct SportBadgeView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Text(sport.emoji)
+            Image(systemName: sport.sfSymbol)
                 .font(.caption)
                 .padding(5)
                 .background(AthlyTheme.Color.primary.opacity(0.1))

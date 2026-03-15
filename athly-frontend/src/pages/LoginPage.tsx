@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { Mail, Lock, Rocket, Sparkles, Dumbbell, BarChart3, Target } from "lucide-react";
 import { Button, Card, GradientText, Badge, Divider } from "@/components/ui";
 import { Input } from "@/components/ui/Input";
 import { useAuthStore } from "@/store/authStore";
@@ -53,7 +54,7 @@ export function LoginPage() {
             Seu personal trainer inteligente
           </p>
           <Badge variant="neon" className="mt-4">
-            ✨ Powered by AI
+            <Sparkles className="h-3.5 w-3.5 inline mr-1" />Powered by AI
           </Badge>
         </div>
 
@@ -72,7 +73,7 @@ export function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                icon={<span>📧</span>}
+                icon={<Mail className="h-4 w-4" />}
               />
               <Input
                 label="Senha"
@@ -80,7 +81,7 @@ export function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                icon={<span>🔒</span>}
+                icon={<Lock className="h-4 w-4" />}
               />
 
               <Divider spacing="sm" />
@@ -93,7 +94,7 @@ export function LoginPage() {
                 loading={loading}
                 glow
               >
-                🚀 Entrar
+                <Rocket className="h-5 w-5 inline mr-2" />Entrar
               </Button>
 
               <Button
@@ -134,19 +135,19 @@ export function LoginPage() {
         {/* Features */}
         <div className="mt-8 grid grid-cols-3 gap-4 text-center">
           <div>
-            <div className="text-2xl mb-1">🏋️</div>
+            <Dumbbell className="h-6 w-6 mx-auto mb-1 text-[var(--color-text-tertiary)]" />
             <p className="text-xs text-[var(--color-text-tertiary)]">
               Treinos IA
             </p>
           </div>
           <div>
-            <div className="text-2xl mb-1">📊</div>
+            <BarChart3 className="h-6 w-6 mx-auto mb-1 text-[var(--color-text-tertiary)]" />
             <p className="text-xs text-[var(--color-text-tertiary)]">
               Análises
             </p>
           </div>
           <div>
-            <div className="text-2xl mb-1">🎯</div>
+            <Target className="h-6 w-6 mx-auto mb-1 text-[var(--color-text-tertiary)]" />
             <p className="text-xs text-[var(--color-text-tertiary)]">Metas</p>
           </div>
         </div>

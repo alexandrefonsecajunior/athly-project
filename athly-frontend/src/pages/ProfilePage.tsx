@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { User, Zap, Dumbbell, Flame, Star, Mail, Target, CalendarDays, Save, Settings, LogOut, Activity, Bike } from 'lucide-react'
 import { Card, GradientText, Badge, Divider, StatCard } from '@/components/ui'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
@@ -48,8 +49,8 @@ export function ProfilePage() {
       {/* Header */}
       <Section spacing="md">
         <div className="flex items-center gap-4">
-          <div className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center text-4xl glow-primary">
-            👤
+          <div className="w-20 h-20 rounded-full gradient-primary flex items-center justify-center glow-primary">
+            <User className="h-10 w-10 text-white" />
           </div>
           <div className="flex-1">
             <GradientText variant="primary">
@@ -59,7 +60,7 @@ export function ProfilePage() {
               {user?.email}
             </p>
             <Badge variant="neon" size="sm" className="mt-2">
-              ⚡ Atleta Premium
+              <Zap className="h-3 w-3 inline mr-1" />Atleta Premium
             </Badge>
           </div>
         </div>
@@ -70,19 +71,19 @@ export function ProfilePage() {
         <StatCard
           label="Treinos"
           value="142"
-          icon="🏋️"
+          icon={<Dumbbell className="h-5 w-5" />}
           gradient
         />
         <StatCard
           label="Sequência"
           value="28 dias"
-          icon="🔥"
+          icon={<Flame className="h-5 w-5" />}
           badge={{ text: 'Recorde!', variant: 'success' }}
         />
         <StatCard
           label="Nível"
           value="Avançado"
-          icon="⭐"
+          icon={<Star className="h-5 w-5" />}
         />
       </div>
 
@@ -97,14 +98,14 @@ export function ProfilePage() {
                 label="Nome"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                icon={<span>👤</span>}
+                icon={<User className="h-4 w-4" />}
               />
               <Input
                 label="Email"
                 type="email"
                 value={user?.email ?? ''}
                 disabled
-                icon={<span>📧</span>}
+                icon={<Mail className="h-4 w-4" />}
               />
             </div>
           </Card>
@@ -117,7 +118,7 @@ export function ProfilePage() {
               value={goals}
               onChange={(e) => setGoals(e.target.value)}
               placeholder="Melhorar resistência, Perder peso, Ganhar massa..."
-              icon={<span>🎯</span>}
+              icon={<Target className="h-4 w-4" />}
             />
             <p className="mt-2 text-sm text-[var(--color-text-tertiary)]">
               Separe múltiplos objetivos por vírgula
@@ -134,7 +135,7 @@ export function ProfilePage() {
               max="7"
               value={availability}
               onChange={(e) => setAvailability(e.target.value)}
-              icon={<span>📅</span>}
+              icon={<CalendarDays className="h-4 w-4" />}
             />
             <div className="mt-4 flex gap-2 flex-wrap">
               {[1, 2, 3, 4, 5, 6, 7].map((day) => (
@@ -161,10 +162,10 @@ export function ProfilePage() {
               Personalizado de acordo com suas preferências
             </p>
             <div className="flex flex-wrap gap-2">
-              <Badge variant="primary">🏃 Corrida</Badge>
-              <Badge variant="secondary">🚴 Ciclismo</Badge>
-              <Badge variant="success">💪 Força</Badge>
-              <Badge variant="primary">🧘 Yoga</Badge>
+              <Badge variant="primary"><Activity className="h-3 w-3 inline mr-1" />Corrida</Badge>
+              <Badge variant="secondary"><Bike className="h-3 w-3 inline mr-1" />Ciclismo</Badge>
+              <Badge variant="success"><Dumbbell className="h-3 w-3 inline mr-1" />Força</Badge>
+              <Badge variant="primary"><Star className="h-3 w-3 inline mr-1" />Yoga</Badge>
             </div>
           </Card>
         </Section>
@@ -174,12 +175,12 @@ export function ProfilePage() {
         {/* Actions */}
         <div className="space-y-4">
           <Button type="submit" variant="gradient" fullWidth size="lg" loading={loading} glow>
-            💾 Salvar alterações
+            <Save className="h-5 w-5 inline mr-2" />Salvar alterações
           </Button>
 
           <Link to="/settings" className="block">
             <Button variant="outline" fullWidth size="lg">
-              ⚙️ Configurações e integrações
+              <Settings className="h-5 w-5 inline mr-2" />Configurações e integrações
             </Button>
           </Link>
 
@@ -194,7 +195,7 @@ export function ProfilePage() {
               }
             }}
           >
-            🚪 Sair da conta
+            <LogOut className="h-5 w-5 inline mr-2" />Sair da conta
           </Button>
         </div>
       </form>
