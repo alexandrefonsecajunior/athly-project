@@ -8,9 +8,11 @@ final class RunViewModel: ObservableObject {
     @Published var showSummary = false
     @Published var lastRunResult: RunResult?
     @Published var isSaving = false
+    @Published var isSaved = false
     @Published var saveError: String?
 
     private let locationManager: LocationManager
+    private let healthKitService = HealthKitService()
     private var trackerCancellable: AnyCancellable?
 
     init(locationManager: LocationManager) {
@@ -58,10 +60,12 @@ final class RunViewModel: ObservableObject {
         tracker.discard()
         showSummary = false
         lastRunResult = nil
+        isSaved = false
+        saveError = nil
     }
 
     func saveRun(runStore: RunStore) async {
-        guard let result = lastRunResult else { return }
+        guard let result = lastRunResult, !isSaved else { return }
 
         isSaving = true
         saveError = nil
@@ -92,6 +96,16 @@ final class RunViewModel: ObservableObject {
         }
 
         runStore.add(session)
+
+        // Save to HealthKit (best-effort — failure does not block)
+        if healthKitService.isHealthDataAvailable {
+            do {
+                try await healthKitService.requestAuthorization()
+                try await healthKitService.saveWorkout(result: result)
+            } catch {
+                // HealthKit save failed silently; local save is still valid
+            }
+        }
 
         // Sync with backend
         do {
@@ -130,7 +144,13 @@ final class RunViewModel: ObservableObject {
         }
 
         isSaving = false
+        isSaved = true
+    }
+
+    func dismissSummary() {
         showSummary = false
         lastRunResult = nil
+        isSaved = false
+        saveError = nil
     }
 }

@@ -50,7 +50,7 @@ export class UsersService {
     if (data.weight !== undefined) updateData.weight = data.weight;
     if (data.height !== undefined) updateData.height = data.height;
     if (data.goals !== undefined) updateData.goals = data.goals;
-    if (data.availability !== undefined) updateData.availability = data.availability;
+    if (data.availableDays !== undefined) updateData.availableDays = data.availableDays;
     if (password !== undefined) {
       updateData.password = (await bcrypt.hash(password, 10)) as string;
     }
@@ -84,7 +84,7 @@ export class UsersService {
       weight: user.weight ?? undefined,
       height: user.height ?? undefined,
       goals: user.goals ?? [],
-      availability: user.availability ?? null,
+      availableDays: user.availableDays ?? [],
       assessmentCompleted: user.assessmentCompleted,
     };
   }

@@ -35,6 +35,7 @@ export interface AiPlannerInput {
   totalDistKm: number;
   weekDates: string[];
   trainingDays: number;
+  availableDays: string[];
 }
 
 export interface RunAnalysis {
@@ -62,6 +63,7 @@ export interface WorkoutDay {
   sportType: SportType; // running | walking | other | etc. → sportType
   intensity: number; // 1–10 → intensity
   blocks: WorkoutBlock[]; // → blocks (Json)
+  reasoning?: string;
 }
 
 export interface WorkoutBlock {
@@ -75,4 +77,16 @@ export interface WorkoutBlock {
 export interface PlannerResults {
   analysis: RunAnalysis;
   weekPlan: WorkoutDay[];
+}
+
+export interface PreviousWeekAnalysis {
+  completedWorkouts: number;
+  totalWorkouts: number;
+  completionRate: number;
+  totalDistanceKm: number;
+  avgEffort: number | null;
+  avgFatigue: number | null;
+  skippedWorkouts: string[];
+  volumeChange: string;
+  adherenceNote: string;
 }

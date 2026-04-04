@@ -3,6 +3,7 @@ import SwiftUI
 struct MainTabView: View {
     @EnvironmentObject var locationManager: LocationManager
     @State private var selectedTab: AppTab = .dashboard
+    @State private var isRunInProgress = false
 
     var body: some View {
         Group {
@@ -12,7 +13,7 @@ struct MainTabView: View {
             case .plan:
                 PlanView()
             case .run:
-                RunStartView()
+                RunStartView(isRunInProgress: $isRunInProgress)
             case .history:
                 HistoryView()
             case .profile:
@@ -20,8 +21,10 @@ struct MainTabView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            FloatingTabBar(selectedTab: $selectedTab)
-                .padding(.bottom, 8)
+            if !isRunInProgress {
+                FloatingTabBar(selectedTab: $selectedTab)
+                    .padding(.bottom, 8)
+            }
         }
         .ignoresSafeArea(.keyboard)
     }

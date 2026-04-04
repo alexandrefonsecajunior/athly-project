@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import CoreLocation
 
 // MARK: - Protocol (permite trocar por mock no simulador)
 
@@ -11,24 +12,89 @@ protocol HealthKitRunningWorkoutsProviding: AnyObject, Sendable {
     func fetchLatestRunningWorkouts(limit: Int) async throws -> [HealthKitRunItem]
 }
 
-/// Serviço para leitura de corridas do Health Store (somente leitura, testes de integração).
+/// Serviço para leitura e escrita de corridas no Health Store.
 /// @unchecked Sendable: HKHealthStore não é Sendable; uso é isolado a chamadas async do próprio tipo.
 final class HealthKitService: HealthKitRunningWorkoutsProviding, @unchecked Sendable {
 
     private let store = HKHealthStore()
+
+    private static let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned)!
+    private static let distanceType = HKQuantityType.quantityType(forIdentifier: .distanceWalkingRunning)!
 
     /// Verifica se o HealthKit está disponível (não disponível no simulador em muitos casos).
     var isHealthDataAvailable: Bool {
         HKHealthStore.isHealthDataAvailable()
     }
 
-    /// Solicita autorização para leitura de workouts.
+    /// Solicita autorização para leitura e escrita de workouts.
     func requestAuthorization() async throws {
         guard isHealthDataAvailable else {
             throw HealthKitError.notAvailable
         }
-        let workoutType = HKObjectType.workoutType()
-        try await store.requestAuthorization(toShare: [], read: [workoutType])
+        let typesToShare: Set<HKSampleType> = [
+            HKObjectType.workoutType(),
+            HealthKitService.energyType,
+            HealthKitService.distanceType
+        ]
+        let typesToRead: Set<HKObjectType> = [HKObjectType.workoutType()]
+        try await store.requestAuthorization(toShare: typesToShare, read: typesToRead)
+    }
+
+    /// Salva uma corrida no Apple Health.
+    func saveWorkout(result: RunResult) async throws {
+        guard isHealthDataAvailable else { throw HealthKitError.notAvailable }
+
+        let config = HKWorkoutConfiguration()
+        config.activityType = .running
+        config.locationType = .outdoor
+
+        let builder = HKWorkoutBuilder(healthStore: store, configuration: config, device: .local())
+
+        try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+            builder.beginCollection(withStart: result.startDate) { _, error in
+                if let error { cont.resume(throwing: error) } else { cont.resume() }
+            }
+        }
+
+        var samples: [HKSample] = []
+
+        if result.caloriesBurned > 0 {
+            samples.append(HKQuantitySample(
+                type: HealthKitService.energyType,
+                quantity: HKQuantity(unit: .kilocalorie(), doubleValue: result.caloriesBurned),
+                start: result.startDate,
+                end: result.endDate
+            ))
+        }
+
+        if result.distanceMeters > 0 {
+            samples.append(HKQuantitySample(
+                type: HealthKitService.distanceType,
+                quantity: HKQuantity(unit: .meter(), doubleValue: result.distanceMeters),
+                start: result.startDate,
+                end: result.endDate
+            ))
+        }
+
+        if !samples.isEmpty {
+            try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+                builder.add(samples) { _, error in
+                    if let error { cont.resume(throwing: error) } else { cont.resume() }
+                }
+            }
+        }
+
+        try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+            builder.endCollection(withEnd: result.endDate) { _, error in
+                if let error { cont.resume(throwing: error) } else { cont.resume() }
+            }
+        }
+
+        try await withCheckedThrowingContinuation { (cont: CheckedContinuation<Void, Error>) in
+            builder.finishWorkout { _, error in
+                if let error { cont.resume(throwing: error) } else { cont.resume() }
+            }
+        }
     }
 
     /// Busca as últimas corridas (e opcionalmente caminhadas) do Health Store.

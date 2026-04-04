@@ -10,7 +10,7 @@ export async function updateProfile(data: Partial<User>): Promise<User> {
     name: data.name,
     email: data.email,
     goals: data.goals,
-    availability: data.availability ?? undefined,
+    availableDays: data.availableDays ?? undefined,
   }
   return api.users.usersControllerUpdateProfile({
     updateProfileDto: input

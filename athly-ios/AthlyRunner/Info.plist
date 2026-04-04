@@ -22,6 +22,8 @@
 	<string>1</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>O Athly le treinos de corrida do Apple Health para exibir suas atividades na tela de integracao.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>O Athly salva suas corridas no Apple Health para manter seu historico de atividades atualizado.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Athly Runner precisa de acesso continuo a localizacao para rastrear sua corrida mesmo com a tela bloqueada.</string>
 	<key>NSLocationAlwaysUsageDescription</key>

@@ -26,8 +26,8 @@ export class UserModel {
   @ApiPropertyOptional({ type: [String] })
   goals?: string[];
 
-  @ApiPropertyOptional({ type: Number })
-  availability?: number | null;
+  @ApiPropertyOptional({ type: [String] })
+  availableDays?: string[];
 
   @ApiProperty()
   assessmentCompleted: boolean;

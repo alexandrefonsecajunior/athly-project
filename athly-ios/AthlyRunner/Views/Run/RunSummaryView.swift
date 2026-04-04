@@ -48,30 +48,38 @@ struct RunSummaryView: View {
                         }
                     }
 
-                    // Actions
+                    // Save status + close action
                     VStack(spacing: 12) {
-                        Button {
-                            Task {
-                                await viewModel.saveRun(runStore: runStore)
+                        if viewModel.isSaving {
+                            HStack(spacing: 8) {
+                                ProgressView()
+                                    .tint(AthlyTheme.Color.primary)
+                                Text("Salvando corrida...")
+                                    .font(AthlyTheme.Typography.body(15))
+                                    .foregroundStyle(AthlyTheme.Color.textSecondary)
                             }
+                            .padding(.vertical, 8)
+                        } else if let error = viewModel.saveError {
+                            HStack(spacing: 6) {
+                                Image(systemName: "wifi.slash")
+                                    .font(.system(size: 14))
+                                Text(error)
+                                    .font(AthlyTheme.Typography.body(13))
+                            }
+                            .foregroundStyle(AthlyTheme.Color.warning)
+                            .multilineTextAlignment(.center)
+                        }
+
+                        Button {
+                            viewModel.dismissSummary()
                         } label: {
                             HStack {
-                                if viewModel.isSaving {
-                                    ProgressView()
-                                        .tint(.white)
-                                } else {
-                                    Image(systemName: "square.and.arrow.down")
-                                    Text("Salvar corrida")
-                                }
+                                Image(systemName: viewModel.isSaved ? "checkmark.circle.fill" : "clock")
+                                Text(viewModel.isSaved ? "Corrida salva!" : "Salvando...")
                             }
                         }
                         .buttonStyle(AthlyGradientButtonStyle())
                         .disabled(viewModel.isSaving)
-
-                        Button("Descartar", role: .destructive) {
-                            viewModel.discardRun()
-                        }
-                        .foregroundStyle(AthlyTheme.Color.error)
                     }
                     .padding(.horizontal, AthlyTheme.Spacing.md)
                     .padding(.bottom, AthlyTheme.Spacing.lg)
@@ -80,6 +88,9 @@ struct RunSummaryView: View {
             .scrollContentBackground(.hidden)
         }
         .navigationBarBackButtonHidden(true)
+        .task {
+            await viewModel.saveRun(runStore: runStore)
+        }
     }
 
     private func summaryMap(locations: [CLLocation]) -> some View {

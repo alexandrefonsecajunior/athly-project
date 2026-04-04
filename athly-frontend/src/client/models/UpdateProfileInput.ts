@@ -66,7 +66,7 @@ export interface UpdateProfileInput {
      * @type {number}
      * @memberof UpdateProfileInput
      */
-    availability?: number;
+    availableDays?: Array<string>;
     /**
      * 
      * @type {string}
@@ -99,7 +99,7 @@ export function UpdateProfileInputFromJSONTyped(json: any, ignoreDiscriminator: 
         'weight': json['weight'] == null ? undefined : json['weight'],
         'height': json['height'] == null ? undefined : json['height'],
         'goals': json['goals'] == null ? undefined : json['goals'],
-        'availability': json['availability'] == null ? undefined : json['availability'],
+        'availableDays': json['availableDays'] == null ? undefined : json['availableDays'],
         'password': json['password'] == null ? undefined : json['password'],
     };
 }
@@ -122,7 +122,7 @@ export function UpdateProfileInputToJSONTyped(value?: UpdateProfileInput | null,
         'weight': value['weight'],
         'height': value['height'],
         'goals': value['goals'],
-        'availability': value['availability'],
+        'availableDays': value['availableDays'],
         'password': value['password'],
     };
 }

@@ -1,9 +1,10 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,
-  IsInt,
   IsOptional,
   IsString,
+  IsArray,
+  IsIn,
   Min,
   MinLength,
   IsEnum,
@@ -50,11 +51,12 @@ export class UpdateProfileDto {
   @IsOptional()
   goals?: string[];
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: [String] })
   @IsOptional()
-  @IsInt()
-  @Min(0)
-  availability?: number;
+  @IsArray()
+  @IsString({ each: true })
+  @IsIn(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], { each: true })
+  availableDays?: string[];
 
   @ApiPropertyOptional()
   @IsOptional()

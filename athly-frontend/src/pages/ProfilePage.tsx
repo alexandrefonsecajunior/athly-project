@@ -9,12 +9,22 @@ import { useAuthStore } from '@/store/authStore'
 import { getProfile, updateProfile } from '@/services/profileService'
 import toast from 'react-hot-toast'
 
+const WEEKDAYS = [
+  { key: 'monday', label: 'Seg' },
+  { key: 'tuesday', label: 'Ter' },
+  { key: 'wednesday', label: 'Qua' },
+  { key: 'thursday', label: 'Qui' },
+  { key: 'friday', label: 'Sex' },
+  { key: 'saturday', label: 'Sab' },
+  { key: 'sunday', label: 'Dom' },
+]
+
 export function ProfilePage() {
   const navigate = useNavigate()
   const { user, setUser, logout } = useAuthStore()
   const [name, setName] = useState(user?.name ?? '')
   const [goals, setGoals] = useState(user?.goals?.join(', ') ?? '')
-  const [availability, setAvailability] = useState(String(user?.availability ?? 5))
+  const [availableDays, setAvailableDays] = useState<string[]>(user?.availableDays ?? [])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -22,9 +32,15 @@ export function ProfilePage() {
       setUser(profile)
       setName(profile.name)
       setGoals(profile.goals?.join(', ') ?? '')
-      setAvailability(String(profile.availability ?? 5))
+      setAvailableDays(profile.availableDays ?? [])
     })
   }, [setUser])
+
+  function toggleDay(day: string) {
+    setAvailableDays((prev) =>
+      prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    )
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -33,7 +49,7 @@ export function ProfilePage() {
       const updated = await updateProfile({
         name,
         goals: goals.split(',').map((g) => g.trim()).filter(Boolean),
-        availability: Number(availability) || 5,
+        availableDays,
       })
       setUser(updated)
       toast.success('Perfil atualizado!')
@@ -126,30 +142,27 @@ export function ProfilePage() {
           </Card>
         </Section>
 
-        <Section title="Disponibilidade" subtitle="Quantos dias você pode treinar?" spacing="md">
+        <Section title="Dias de Treino" subtitle="Quais dias da semana você pode treinar?" spacing="md">
           <Card padding="lg">
-            <Input
-              label="Dias por semana"
-              type="number"
-              min="1"
-              max="7"
-              value={availability}
-              onChange={(e) => setAvailability(e.target.value)}
-              icon={<CalendarDays className="h-4 w-4" />}
-            />
-            <div className="mt-4 flex gap-2 flex-wrap">
-              {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+            <div className="flex items-center gap-2 mb-3">
+              <CalendarDays className="h-4 w-4 text-[var(--color-text-secondary)]" />
+              <span className="text-sm text-[var(--color-text-secondary)]">
+                {availableDays.length} {availableDays.length === 1 ? 'dia' : 'dias'} selecionado{availableDays.length !== 1 ? 's' : ''}
+              </span>
+            </div>
+            <div className="flex gap-2 flex-wrap">
+              {WEEKDAYS.map(({ key, label }) => (
                 <button
-                  key={day}
+                  key={key}
                   type="button"
-                  onClick={() => setAvailability(String(day))}
+                  onClick={() => toggleDay(key)}
                   className={`px-4 py-2 rounded-xl font-semibold transition-all ${
-                    Number(availability) === day
+                    availableDays.includes(key)
                       ? 'gradient-primary text-white glow-primary'
                       : 'bg-[var(--color-surface-dark)] text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-card)]'
                   }`}
                 >
-                  {day}
+                  {label}
                 </button>
               ))}
             </div>

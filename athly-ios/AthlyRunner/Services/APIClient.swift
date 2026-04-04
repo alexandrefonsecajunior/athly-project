@@ -162,10 +162,11 @@ actor APIClient {
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .iso8601
+            let decodableData = data.isEmpty ? Data("null".utf8) : data
             do {
-                return try decoder.decode(T.self, from: data)
+                return try decoder.decode(T.self, from: decodableData)
             } catch {
-                let raw = String(data: data, encoding: .utf8) ?? ""
+                let raw = String(data: decodableData, encoding: .utf8) ?? ""
                 print("[APIClient] Decode failed for \(T.self): \(error)")
                 if let de = error as? DecodingError {
                     switch de {
@@ -248,6 +249,8 @@ struct UserProfile: Decodable {
     let email: String
     let weight: Double?
     let height: Double?
+    let availableDays: [String]?
+    let assessmentCompleted: Bool?
 }
 
 // MARK: - Errors

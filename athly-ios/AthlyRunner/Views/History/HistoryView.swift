@@ -31,6 +31,13 @@ struct HistoryView: View {
                             runRow(run)
                                 .listRowBackground(AthlyTheme.Color.surfaceDark)
                                 .listRowSeparatorTint(AthlyTheme.Color.borderDark)
+                                .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                    Button(role: .destructive) {
+                                        runStore.delete(run)
+                                    } label: {
+                                        Label("Excluir", systemImage: "trash")
+                                    }
+                                }
                         }
                         .listStyle(.plain)
                         .scrollContentBackground(.hidden)

@@ -1,12 +1,17 @@
-import type { AiPlannerInput } from '../types/planner.types';
+import type { AiPlannerInput, PreviousWeekAnalysis } from '../types/planner.types';
+import type { FormattedZones } from '../../effort-zones/types/effort-zone.types';
 
 export type { AiPlannerInput };
 
-const GOAL = {
-  distanceKm: 5,
-  targetTimeMin: 26,
-  targetPace: '5:12/km',
-} as const;
+const DAY_NAME_MAP: Record<string, string> = {
+  monday: 'Segunda',
+  tuesday: 'Terça',
+  wednesday: 'Quarta',
+  thursday: 'Quinta',
+  friday: 'Sexta',
+  saturday: 'Sábado',
+  sunday: 'Domingo',
+};
 
 function classifyAthlete(avgPace: string): string {
   const match = avgPace.match(/^(\d+):(\d{2})/);
@@ -17,41 +22,72 @@ function classifyAthlete(avgPace: string): string {
   return 'Meta ao alcance (≤ 5:12/km) — refinar o pace de corrida e estratégia de ritmo';
 }
 
-const EFFORT_ZONES = `
-<effort_zones>
-| RPE | Zona            | Descrição                                          | Uso típico                   |
-|-----|-----------------|----------------------------------------------------|------------------------------|
-| 2-3 | Recuperação     | Muito fácil, conversa completa sem dificuldade     | Aquecimento, volta à calma   |
-| 4-5 | Aeróbico/Fácil  | Confortável, fala frases completas                 | Corridas de base             |
-| 6   | Moderado        | Frases curtas, esforço perceptível                 | Corridas progressivas        |
-| 7   | Limiar Lático   | Difícil, apenas frases curtíssimas                 | Intervalos de tempo/tempo    |
-| 8-9 | Intenso         | Muito difícil, palavras isoladas                   | Intervalos de velocidade     |
-| 10  | Máximo          | All-out, sem falar                                 | Sprints curtos apenas        |
-</effort_zones>`;
+function formatAvailableDays(availableDays: string[]): string {
+  return availableDays.map((d) => DAY_NAME_MAP[d] || d).join(', ');
+}
+
+function buildPreviousWeekSection(analysis: PreviousWeekAnalysis): string {
+  const completionPct = Math.round(analysis.completionRate * 100);
+  const skippedList = analysis.skippedWorkouts.length > 0
+    ? analysis.skippedWorkouts.join(', ')
+    : 'nenhum';
+
+  return `
+<previous_week_review>
+Resumo da semana anterior:
+- Treinos completados: ${analysis.completedWorkouts}/${analysis.totalWorkouts} (${completionPct}%)
+- Treinos pulados: ${skippedList}
+- Esforço médio reportado: ${analysis.avgEffort !== null ? `${analysis.avgEffort}/10` : 'sem dados'}
+- Fadiga média reportada: ${analysis.avgFatigue !== null ? `${analysis.avgFatigue}/10` : 'sem dados'}
+- Volume total completado: ${analysis.totalDistanceKm} km
+- Mudança de volume: ${analysis.volumeChange}
+- ${analysis.adherenceNote}
+
+Considere estes dados ao planejar a próxima semana:
+- Se aderência foi baixa (< 70%), considere reduzir volume ou número de treinos intensos.
+- Se fadiga foi alta (> 7/10), inclua mais dias de recuperação ou reduza intensidade.
+- Se todos os treinos foram completados com esforço baixo (< 5/10), considere progredir intensidade ou volume.
+- Se o atleta pulou treinos intensos, considere se a carga está adequada.
+</previous_week_review>`;
+}
+
+const REASONING_INSTRUCTION = `
+<reasoning_requirement>
+Para CADA dia de treino (não descanso), inclua um campo "reasoning" no JSON explicando:
+1. POR QUE este tipo de treino foi escolhido para este dia específico
+2. QUAIS dados do atleta embasaram a decisão (pace atual, volume, tendência, VDOT, feedback da semana anterior)
+3. COMO este treino contribui para o objetivo do atleta
+O reasoning deve ser técnico e específico, não genérico. Mínimo 2 frases.
+Dias de descanso NÃO precisam de reasoning.
+</reasoning_requirement>`;
 
 /**
- * Prompt for athletes with no Strava running history.
- * Asks Gemini to generate assessment workouts spread across the week,
- * respecting the athlete's configured training days.
+ * Prompt for athletes with no running history.
+ * Generates assessment workouts on the specified available days.
  */
-export function buildAssessmentPrompt(weekDates: string[], trainingDays: number): string {
+export function buildAssessmentPrompt(
+  weekDates: string[],
+  trainingDays: number,
+  availableDays: string[],
+  effortZones: FormattedZones,
+): string {
   const restDays = 7 - trainingDays;
-
+  const daysList = formatAvailableDays(availableDays);
   const workoutTemplates = buildAssessmentWorkoutTemplates(trainingDays);
 
   return `<role>
-Você é um treinador de corrida experiente recebendo um novo atleta que ainda não tem histórico de corridas registrado no Strava.
+Você é um treinador de corrida experiente recebendo um novo atleta que ainda não tem histórico de corridas registrado.
 Seu objetivo é criar ${trainingDays} treinos de avaliação distribuídos ao longo da próxima semana para medir com segurança o nível de condicionamento físico atual antes de prescrever um plano de treino personalizado.
 Tom: acolhedor, encorajador e claro — este atleta está iniciando sua jornada.
 </role>
 
 <language>
-OBRIGATÓRIO: escreva TODO o texto visível ao usuário em Português Brasileiro (pt-BR). Isso inclui: title, description, instructions de cada bloco, fitnessInsights e o campo period.
+OBRIGATÓRIO: escreva TODO o texto visível ao usuário em Português Brasileiro (pt-BR). Isso inclui: title, description, instructions de cada bloco, fitnessInsights, reasoning e o campo period.
 Mantenha em inglês apenas: keys do JSON, valores de enum (sportType, type, trend), formato de datas (YYYY-MM-DD) e formato de pace (M:SS/km).
 </language>
 
 <context>
-O atleta não possui dados de corrida anteriores. Antes de criar um plano personalizado com o objetivo de correr 5 km em menos de 26 minutos, é necessário avaliar:
+O atleta não possui dados de corrida anteriores. Antes de criar um plano personalizado, é necessário avaliar:
 1. A base aeróbica (corrida em ritmo fácil)
 2. O limiar lático (esforço de tempo)
 3. O teto de velocidade (intervalos curtos)
@@ -60,22 +96,26 @@ O atleta não possui dados de corrida anteriores. Antes de criar um plano person
 
 Os ${restDays} dias restantes da semana devem ser dias de descanso completo.
 Semana a planejar: ${weekDates[0]} (Segunda) até ${weekDates[6]} (Domingo).
+Dias de treino do atleta: ${daysList}
 </context>
 
-${EFFORT_ZONES}
+${effortZones.formatted}
 
 <assessment_workouts>
 Estes são os treinos de avaliação que você deve distribuir nos ${trainingDays} dias de treino:
 ${workoutTemplates}
 
 Distribua os treinos de forma inteligente ao longo da semana:
+- Treinos DEVEM ser agendados APENAS nos seguintes dias: ${daysList}. Os demais dias são descanso obrigatório.
 - Nunca coloque dois treinos intensos (RPE >= 7) em dias consecutivos.
-- Alterne sempre entre dias de treino e descanso quando possível.
 - O treino de velocidade (intervalos) deve vir após pelo menos 1 dia de descanso ou treino fácil.
 </assessment_workouts>
 
+${REASONING_INSTRUCTION}
+
 <constraints>
-- Gere EXATAMENTE ${trainingDays} dias de treino e ${restDays} dias de descanso — 7 entradas no total.
+- Gere EXATAMENTE 7 entradas no total: ${trainingDays} dias de treino e ${restDays} dias de descanso.
+- Treinos SOMENTE nos dias: ${daysList}. Todos os outros dias = descanso.
 - Mantenha todas as distâncias conservadoras (1–6 km) já que não há dados de linha de base.
 - Use RPE (escala 1–10) para guia de esforço, pois não há histórico de frequência cardíaca.
 - sportType deve ser exatamente um de: "running" | "walking" | "other". Use "running" para dias de treino, "other" para dias de descanso.
@@ -103,7 +143,7 @@ Retorne APENAS este JSON — sem markdown, sem texto extra:
     "avgHeartRate": null,
     "totalDistanceKm": 0,
     "trend": "maintaining",
-    "fitnessInsights": "<explicação em português de que nenhum dado Strava foi encontrado e que essas sessões são a linha de base de avaliação>"
+    "fitnessInsights": "<explicação em português de que nenhum dado foi encontrado e que essas sessões são a linha de base de avaliação>"
   },
   "weekPlan": [
     {
@@ -113,6 +153,7 @@ Retorne APENAS este JSON — sem markdown, sem texto extra:
       "description": "<descrição geral da sessão com meta de RPE em português>",
       "sportType": "<running|walking|other>",
       "intensity": <número 1-10>,
+      "reasoning": "<justificativa técnica em português — obrigatório para dias de treino, omitir para descanso>",
       "blocks": [
         {
           "type": "<warmup|main|cooldown|rest>",
@@ -165,10 +206,14 @@ function buildAssessmentWorkoutTemplates(trainingDays: number): string {
 }
 
 /**
- * Prompt for athletes with running history from Strava.
- * Asks Gemini to generate a personalized 7-day plan based on recent data.
+ * Prompt for athletes with running history.
+ * Generates a personalized 7-day plan based on recent data, effort zones, and previous week analysis.
  */
-export function buildPlannerPrompt(input: AiPlannerInput): string {
+export function buildPlannerPrompt(
+  input: AiPlannerInput,
+  effortZones: FormattedZones,
+  previousWeekAnalysis?: PreviousWeekAnalysis | null,
+): string {
   const {
     runSummaries,
     avgDistKm,
@@ -178,19 +223,25 @@ export function buildPlannerPrompt(input: AiPlannerInput): string {
     totalDistKm,
     weekDates,
     trainingDays,
+    availableDays,
   } = input;
   const restDays = 7 - trainingDays;
   const athleteClass = classifyAthlete(avgPace);
   const hrCtx = avgHR ? `${avgHR} bpm` : 'não disponível — prescreva esforço por RPE (escala 1–10)';
+  const daysList = formatAvailableDays(availableDays);
+
+  const previousWeekSection = previousWeekAnalysis
+    ? buildPreviousWeekSection(previousWeekAnalysis)
+    : '';
 
   return `<role>
-Você é um treinador de corrida experiente. O objetivo do seu atleta é correr ${GOAL.distanceKm}km em menos de ${GOAL.targetTimeMin} minutos (pace alvo: ${GOAL.targetPace}).
+Você é um treinador de corrida experiente. Crie um plano de treino personalizado baseado nos dados reais do atleta.
 Tom: direto, motivador e orientado por dados — como um treinador de atletismo.
 Classificação atual do atleta: ${athleteClass}.
 </role>
 
 <language>
-OBRIGATÓRIO: escreva TODO o texto visível ao usuário em Português Brasileiro (pt-BR). Isso inclui: title, description, instructions de cada bloco e fitnessInsights.
+OBRIGATÓRIO: escreva TODO o texto visível ao usuário em Português Brasileiro (pt-BR). Isso inclui: title, description, instructions de cada bloco, fitnessInsights e reasoning.
 Mantenha em inglês apenas: keys do JSON, valores de enum (sportType, type, trend), formato de datas (YYYY-MM-DD) e formato de pace (M:SS/km).
 </language>
 
@@ -205,34 +256,28 @@ Estatísticas resumidas:
 - Maior corrida recente: ${maxDistKm.toFixed(2)} km
 - Distância total analisada: ${totalDistKm.toFixed(2)} km
 - Semana a planejar: ${weekDates[0]} (Segunda) até ${weekDates[6]} (Domingo)
-- Dias de treino disponíveis: ${trainingDays} dias (${restDays} dias de descanso)
+- Dias de treino do atleta: ${daysList} (${trainingDays} dias de treino, ${restDays} de descanso)
 </athlete_data>
 
 <task>
 1. Analise o nível de condicionamento físico, tendência de pace e padrões de treino do atleta.
-2. Monte um plano equilibrado de 7 dias (${weekDates[0]} a ${weekDates[6]}) seguindo princípios de periodização em direção ao objetivo de sub-${GOAL.targetTimeMin}min nos ${GOAL.distanceKm}km.
-3. Derive todas as distâncias e paces dos dados reais do atleta — nunca invente números.
-4. Respeite ESTRITAMENTE a disponibilidade: inclua EXATAMENTE ${trainingDays} dias de treino e ${restDays} dias de descanso.
+2. Monte um plano equilibrado de 7 dias (${weekDates[0]} a ${weekDates[6]}) seguindo princípios de periodização.
+3. Derive todas as distâncias e paces dos dados reais do atleta e das zonas personalizadas abaixo.
+4. Respeite ESTRITAMENTE a disponibilidade: treinos SOMENTE nos dias ${daysList}. Os demais dias são descanso obrigatório.
 5. Retorne APENAS o objeto JSON descrito em <output_schema>. Sem markdown, sem prosa, sem keys extras.
 </task>
 
-${EFFORT_ZONES}
+${effortZones.formatted}
 
-<reference_paces>
-| Tipo de sessão     | Pace alvo    |
-|--------------------|--------------|
-| Intervalos (400m)  | 4:45–5:00/km |
-| Tempo run          | 5:12–5:20/km |
-| Corrida longa      | 6:00–6:30/km |
-| Recuperação        | 6:30–7:00/km |
-| Descanso           | —            |
-</reference_paces>
+${previousWeekSection}
+
+${REASONING_INSTRUCTION}
 
 <constraints>
+- Treinos DEVEM ser agendados APENAS nos seguintes dias: ${daysList}. Todos os outros dias = descanso obrigatório.
 - Nunca aumente o volume semanal em mais de 10% acima da média recente do atleta.
 - Sessões de intervalos devem incluir aquecimento de 10 min e volta à calma de 5 min (refletido nos blocks).
 - Se dados de FC não estiverem disponíveis, prescreva o esforço por RPE no campo instructions.
-- Dias de descanso são inegociáveis — inclua EXATAMENTE ${restDays} dias de descanso completo.
 - weekPlan deve conter EXATAMENTE 7 entradas, uma por dia de ${weekDates[0]} a ${weekDates[6]}.
 - sportType deve ser exatamente um de: "running" | "walking" | "other". Use "running" para dias de treino, "other" para dias de descanso.
 - intensity deve ser um número de 1 a 10. Descanso = 1, fácil = 3, moderado = 6, intenso = 9.
@@ -243,6 +288,7 @@ ${EFFORT_ZONES}
 - Corridas de recuperação/fácil: mínimo de 20 minutos no bloco "main".
 - Sessões de intervalos: especifique no campo instructions o número de repetições, distância, pace alvo e tempo de descanso entre as repetições.
 - Dias de descanso devem ter blocks: [{ "type": "rest", "instructions": "Dia de descanso completo. Sem corrida." }].
+- Use as zonas de pace personalizadas acima para prescrever targetPace — NÃO invente paces arbitrários.
 </constraints>
 
 <output_schema>
@@ -256,7 +302,7 @@ Retorne APENAS este JSON — sem markdown, sem texto extra:
     "avgHeartRate": <número | null>,
     "totalDistanceKm": <número>,
     "trend": "<improving (volume) | improving (intensity) | maintaining | declining>",
-    "fitnessInsights": "<2–3 frases em português: diagnóstico atual do condicionamento, padrão-chave identificado e uma área de foco concreta para chegar ao sub-${GOAL.targetTimeMin}min>"
+    "fitnessInsights": "<2–3 frases em português: diagnóstico atual do condicionamento, padrão-chave identificado e uma área de foco concreta>"
   },
   "weekPlan": [
     {
@@ -266,6 +312,7 @@ Retorne APENAS este JSON — sem markdown, sem texto extra:
       "description": "<descrição geral da sessão com instrução específica de treino em português>",
       "sportType": "<running|walking|other>",
       "intensity": <número 1-10>,
+      "reasoning": "<justificativa técnica em português — obrigatório para dias de treino, omitir para descanso>",
       "blocks": [
         {
           "type": "<warmup|main|cooldown|rest>",

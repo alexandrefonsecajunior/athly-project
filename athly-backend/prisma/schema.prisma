@@ -71,7 +71,7 @@ model User {
   weight               Float?
   height               Float?
   goals                String[]
-  availability         Int?
+  availableDays        String[]  @default([]) @map("available_days")
   imc                  Float?
   assessmentCompleted  Boolean   @default(false) @map("assessment_completed")
   createdAt            DateTime  @default(now()) @map("created_at")
@@ -84,6 +84,7 @@ model User {
   integrations  Integration[]
   equipments    UserEquipment[]
   assessment    Assessment?
+  effortZones   UserEffortZone[]
 
   @@map("users")
 }
@@ -120,6 +121,7 @@ model Workout {
   weeklyGoal   WeeklyGoal?       @relation(fields: [weeklyGoalId], references: [id], onDelete: Cascade)
   userId       String            @map("user_id")
   feedback     WorkoutFeedback[]
+  aiReasoning  AiReasoning?
 
   @@map("workouts")
 }
@@ -206,12 +208,14 @@ model WeeklyGoal {
   weekStartDate  DateTime         @map("week_start_date")
   weekEndDate    DateTime         @map("week_end_date")
   status         WeeklyGoalStatus @default(PLANNED)
-  metrics        Json             @map("metrics")
-  updatedAt      DateTime         @updatedAt @map("updated_at")
-  createdAt      DateTime         @default(now()) @map("created_at")
+  metrics              Json             @map("metrics")
+  previousWeekAnalysis Json?            @map("previous_week_analysis")
+  updatedAt            DateTime         @updatedAt @map("updated_at")
+  createdAt            DateTime         @default(now()) @map("created_at")
 
-  trainingPlan TrainingPlan @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
+  trainingPlan TrainingPlan  @relation(fields: [trainingPlanId], references: [id], onDelete: Cascade)
   workouts     Workout[]
+  aiReasonings AiReasoning[]
 
   @@map("weekly_goals")
 }
@@ -226,4 +230,48 @@ model Assessment {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("assessments")
+}
+
+model UserEffortZone {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  vdotScore         Float?   @map("vdot_score")
+  maxHeartRate      Int?     @map("max_heart_rate")
+  restHeartRate     Int?     @map("rest_heart_rate")
+  dataSource        String   @map("data_source")
+  easyPaceMin       Int      @map("easy_pace_min")
+  easyPaceMax       Int      @map("easy_pace_max")
+  marathonPaceMin   Int      @map("marathon_pace_min")
+  marathonPaceMax   Int      @map("marathon_pace_max")
+  thresholdPaceMin  Int      @map("threshold_pace_min")
+  thresholdPaceMax  Int      @map("threshold_pace_max")
+  intervalPaceMin   Int      @map("interval_pace_min")
+  intervalPaceMax   Int      @map("interval_pace_max")
+  repetitionPaceMin Int      @map("repetition_pace_min")
+  repetitionPaceMax Int      @map("repetition_pace_max")
+  hrZones           Json?    @map("hr_zones")
+  calculatedFrom    Json     @map("calculated_from")
+  validUntil        DateTime @map("valid_until")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_effort_zones")
+}
+
+model AiReasoning {
+  id             String     @id @default(uuid())
+  workoutId      String     @unique @map("workout_id")
+  weeklyGoalId   String     @map("weekly_goal_id")
+  justification  String
+  dataPointsUsed Json       @map("data_points_used")
+  promptVersion  String     @map("prompt_version")
+  modelUsed      String     @map("model_used")
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  workout    Workout    @relation(fields: [workoutId], references: [id], onDelete: Cascade)
+  weeklyGoal WeeklyGoal @relation(fields: [weeklyGoalId], references: [id], onDelete: Cascade)
+
+  @@map("ai_reasonings")
 }

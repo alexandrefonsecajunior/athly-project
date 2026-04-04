@@ -13,6 +13,7 @@ import { TrainingPlansModule } from './modules/training-plans/training-plans.mod
 import { AiPlannerModule } from './modules/ai-planner/ai-planner.module';
 import { StravaModule } from './modules/strava/strava.module';
 import { AssessmentModule } from './modules/assessment/assessment.module';
+import { EffortZoneModule } from './modules/effort-zones/effort-zone.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AssessmentModule } from './modules/assessment/assessment.module';
     AiPlannerModule,
     StravaModule,
     AssessmentModule,
+    EffortZoneModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,9 +4,11 @@ import MapKit
 struct RunStartView: View {
     @EnvironmentObject var locationManager: LocationManager
     @StateObject private var viewModel: RunViewModel
+    @Binding var isRunInProgress: Bool
 
-    init() {
+    init(isRunInProgress: Binding<Bool> = .constant(false)) {
         _viewModel = StateObject(wrappedValue: RunViewModel(locationManager: LocationManager()))
+        _isRunInProgress = isRunInProgress
     }
 
     @State private var isInitialized = false
@@ -30,6 +32,12 @@ struct RunStartView: View {
                 viewModel.updateLocationManager(locationManager)
                 isInitialized = true
             }
+        }
+        .onChange(of: viewModel.isActive) { _, active in
+            isRunInProgress = active || viewModel.showSummary
+        }
+        .onChange(of: viewModel.showSummary) { _, summary in
+            isRunInProgress = viewModel.isActive || summary
         }
     }
 

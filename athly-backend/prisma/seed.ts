@@ -27,7 +27,7 @@ async function main() {
       name: 'Alexandre Silva',
       password,
       goals: ['Melhorar resistencia', 'Perder peso'],
-      availability: 5,
+      availableDays: ['monday', 'tuesday', 'wednesday', 'friday', 'saturday'],
     },
     create: {
       id: 'user-1',
@@ -36,7 +36,7 @@ async function main() {
       email: 'alexandre@email.com',
       password,
       goals: ['Melhorar resistencia', 'Perder peso'],
-      availability: 5,
+      availableDays: ['monday', 'tuesday', 'wednesday', 'friday', 'saturday'],
     },
   });
 
