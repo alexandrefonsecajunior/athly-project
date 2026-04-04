@@ -21,6 +21,7 @@ class ApiManager {
   }
 
   private createConfig(): Configuration {
+    console.log(BASE_URL, 'BASE_URL');
     return new Configuration({
       basePath: BASE_URL,
       accessToken: () => this.accessToken || '',
