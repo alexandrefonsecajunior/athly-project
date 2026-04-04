@@ -1,5 +1,10 @@
 FROM node:24-alpine AS builder
 WORKDIR /app
+
+ARG VITE_BACKEND_API_URL
+
+ENV VITE_BACKEND_API_URL=$VITE_BACKEND_API_URL
+
 COPY athly-frontend/package*.json ./
 RUN npm ci
 COPY athly-frontend/ .
